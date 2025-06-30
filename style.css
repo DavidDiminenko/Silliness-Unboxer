@@ -87,11 +87,17 @@ body {
   padding-left: 10px;
 }
 
-.inventory-item {
+
+.inventory-side {
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 10px;
+  align-items: center;
+  gap: 12px;
+}
+
+.inventory-count {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(218, 233, 235);
 }
 
 .prc-btn {
@@ -164,32 +170,32 @@ body {
   border: 6px solid;
   border-radius: 12px;
   box-shadow: 0 0 18px;
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .mil-spec-border {
   border-color: #4B69FF;
-  box-shadow: 0 0 25px #4B69FF;
+  box-shadow: 0 0 20px #4B69FF;
 }
 
 .restricted-border {
   border-color: #8847FF;
-  box-shadow: 0 0 25px #8847FF;
+  box-shadow: 0 0 20px #8847FF;
 }
 
 .classified-border {
   border-color: #D32CE6;
-  box-shadow: 0 0 25px #D32CE6;
+  box-shadow: 0 0 20px #D32CE6;
 }
 
 .covert-border {
   border-color: #EB4B4B;
-  box-shadow: 0 0 25px #EB4B4B;
+  box-shadow: 0 0 20px #EB4B4B;
 }
 
 .exceedinglyrare-border {
   border-color: #FFD700;
-  box-shadow: 0 0 25px #FFD700;
+  box-shadow: 0 0 20px #FFD700;
 }
 
 .coin-float {

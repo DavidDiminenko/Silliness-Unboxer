@@ -103,7 +103,7 @@ document.getElementById("deduct-button").addEventListener("click", function (eve
         sillyCaseCount++; // increase case count
         updateCaseDisplay();
     } else {
-        alert("Not enough Silly Coins, silly! You need at least 5 !!");
+        alert("Not enough Silly Coins, silly! You need at least 3 silly coins !!");
     }
     document.getElementById("coin-counter").textContent = sillyCoins;
 });
@@ -145,22 +145,29 @@ document.getElementById("use-case-btn").addEventListener("click", function () {
 });
 
 function renderInventory() {
-    const container = document.getElementById("inventory-container");
-    container.innerHTML = "";
+  const container = document.getElementById("inventory-container");
+  container.innerHTML = "";
 
-    const sorted = Object.entries(inventory).sort((a, b) => {
-        return a[1].rarityIndex - b[1].rarityIndex;
-    });
+  const sorted = Object.entries(inventory).sort((a, b) => {
+    return a[1].rarityIndex - b[1].rarityIndex;
+  });
 
-    sorted.forEach(([name, data]) => {
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "inventory-item";
-        itemDiv.innerHTML = `
-            <img src="${data.src}" alt="${name}" style="width: 100px;">
-            <span>x${data.count}</span>
-        `;
-        container.appendChild(itemDiv);
-    });
+  sorted.forEach(([name, data]) => {
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "inventory-item";
+
+    // Get rarity class
+    const rarityName = rarityOrder[data.rarityIndex];
+    const lowerRarity = rarityName.toLowerCase().replace(/\s/g, "");
+
+    itemDiv.innerHTML = `
+  <div class="inventory-side">
+    <img src="${data.src}" alt="${name}" class="rarity-border ${lowerRarity}-border" style="width: 100px;">
+    <span class="inventory-count">x${data.count}</span>
+  </div>
+`;
+    container.appendChild(itemDiv);
+  });
 }
 const gifPool = [...lootTable["Mil-Spec"].items, ...lootTable["Restricted"].items, ...lootTable["Classified"].items, ...lootTable["Covert"].items];
 
@@ -261,9 +268,11 @@ function renderLootPanel() {
             itemDiv.style.width = "120px";
             itemDiv.style.backgroundColor = "black";
             itemDiv.innerHTML = `
-                <img src="${item.src}" alt="${item.name}" width="100"><br>
-                <small style="color: white;">${individualChance.toFixed(2)}%</small>
-            `;
+  <div class="loot-item">
+    <img src="${item.src}" alt="${item.name}" width="100">
+    <small>${individualChance.toFixed(2)}%</small>
+  </div>
+        `;
             panel.appendChild(itemDiv);
         });
     });
@@ -295,6 +304,6 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // make better unboxing animation                                                       --semi fixed lol     
 // stats page
 // being able to view gifs unboxed (expand them)   
-// numbers - + 
+// numbers - +                                                                          -- added
 // sell value
 // upgrades
