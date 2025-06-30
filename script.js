@@ -264,4 +264,4 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // % somewhere                                                                          --added
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make better unboxing animation                                                       
-// make it more mobile friendly     
+// make it more mobile friendly                                                         --fixed
