@@ -94,7 +94,7 @@ function showFloatingCoins(x, y, text, color = "#00ff66") {
   // Generate a small random offset within ±12.5px
   const offsetX = (Math.random() - 0.5) * 25;
   const offsetY = (Math.random() - 0.5) * 25;
-  
+
 float.style.left = `${x + window.scrollX + offsetX}px`;
 float.style.top = `${y + window.scrollY + offsetY}px`;
 
@@ -347,10 +347,13 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // stats page
 // being able to view gifs unboxed (expand them)   
 // numbers - +                                                                          -- added
+// add money per min
+// make money sticky on top right? idk yet
+// sell duplicates, auto sell under x rarity, bulk sell (as in 1,10,all per button changable)
 
 // later problems lol
-// sell value
-// tooltips for value
+// sell value                                                                           --added but to be adjusted
+// tooltips for value                                                                   --added
 // upgrades
 // ig very easy to edit saves but like I dont really care lol
 
