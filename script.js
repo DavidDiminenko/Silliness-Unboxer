@@ -1,3 +1,4 @@
+
 const lootTable = {
     // case % and items and all that
     "Exceedingly Rare": {
@@ -46,6 +47,7 @@ const lootTable = {
 
 const rarityOrder = ["Exceedingly Rare", "Covert", "Classified", "Restricted", "Mil-Spec"];
 
+const useCaseBtn = document.getElementById("use-case-btn");
 let inventory = {};
 let sillyCoins = 0;
 let sillyCaseCount = 0;
@@ -107,6 +109,9 @@ document.getElementById("use-case-btn").addEventListener("click", function () {
             };
         }
 
+        this.disabled = true;
+        setTimeout(() => { this.disabled = false; }, 4300);
+
         const resultDiv = document.getElementById("unbox-result");
         resultDiv.innerHTML = `
         
@@ -115,7 +120,9 @@ document.getElementById("use-case-btn").addEventListener("click", function () {
 
         spinToReveal(unboxedItem);
 
+        setTimeout(() => {
         renderInventory();
+        }, 4290); 
     } else {
         alert("You don't have enough Silly Cases!");
     }
@@ -214,5 +221,46 @@ function loadProgress() {
         alert("Invalid save string");
     }
 }
+// Builds the loot panel content
+function renderLootPanel() {
+    const panel = document.getElementById("loot-panel");
+    panel.innerHTML = "";
 
-// to add: saving progress   and unboxing animations?
+    rarityOrder.forEach(rarity => {
+        const { chance, items } = lootTable[rarity];
+        const individualChance = chance / items.length;
+
+        items.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.style.padding = "10px";
+            itemDiv.style.textAlign = "center";
+            itemDiv.style.width = "120px";
+            itemDiv.style.backgroundColor = "black";
+            itemDiv.innerHTML = `
+                <img src="${item.src}" alt="${item.name}" width="100"><br>
+                <small style="color: white;">${individualChance.toFixed(2)}%</small>
+            `;
+            panel.appendChild(itemDiv);
+        });
+    });
+}
+
+document.getElementById("toggle-loot-panel").addEventListener("click", () => {
+    const panel = document.getElementById("loot-panel");
+    const button = document.getElementById("toggle-loot-panel");
+
+    if (panel.style.display === "none") {
+        renderLootPanel();
+        panel.style.display = "flex";
+        button.textContent = "Hide %";
+    } else {
+        panel.style.display = "none";
+        button.textContent = "Show %";
+    }
+});
+
+// add buffer to prevent being able to spam case before animation is finished           --fixed
+// make better unboxing animation                                                       
+// make it more mobile friendly                                                         
+// inv spoils pull                                                                      --fixed finally
+// % somewhere                                                                          --added

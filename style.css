@@ -1,105 +1,106 @@
         body {
-  background-color: black; 
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 50px;
-        }
-       
-       .headline-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .headline {
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-             color: rgb(218, 233, 235);
-        }
-
-        .side-gif {
-            width: 200px;
-        }
-
-        .counter-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 525px; 
-        }
-
-        .silly-gif {
-            cursor: pointer;
-            width: 200px;
-        }
-
-        .deduct-gif {
-            cursor: pointer;
-            width: 80px;
-            height: auto;
-        }
-
-        .text {
-            font-size: 24px;
-            font-weight: bold;
-            color: rgb(218, 233, 235);
-        }
-
-        .cases-container {
-            text-align: left;
-            margin-top: 10px;
-        }
-   
-        .unbox-result {
-            margin-top: 30px;
-            text-align: center;
-            color: rgb(218, 233, 235);
-        }
-
-        .unbox-result img {
-  width: 400px;
-  margin-top: 10px;
-        }
-
-
-        .use-case-btn {
-    font-size: 18px;
-    padding: 10px;
-    cursor: pointer;
-    border: none;
-    background-color: pink; 
-    color: white; 
-    border-radius: 5px;
-        }
-        
-        .gif-inventory{
-            padding-top: 15px;
-            text-align: left;
-            margin-top: 10px;
-        }
-
-        .inventory-container {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  color: rgb(218, 233, 235);
+	background-color:black;
+	font-family:sans-serif;
+	text-align:center;
+	margin-top:50px;
 }
-
+.headline-container {
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	gap:20px;
+}
+.headline {
+	font-size:36px;
+	font-weight:bold;
+	text-align:center;
+	color:rgb(218,233,235);
+}
+.side-gif {
+	width:200px;
+}
+.counter-container {
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	gap:20px;
+	justify-content:center;
+	margin-top:20px;
+}
+.button-container {
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	width:525px;
+}
+.silly-gif {
+	cursor:pointer;
+	width:200px;
+}
+.deduct-gif {
+	cursor:pointer;
+	width:80px;
+	height:auto;
+}
+.text {
+	font-size:24px;
+	font-weight:bold;
+	color:rgb(218,233,235);
+}
+.cases-container {
+	text-align:left;
+	margin-top:10px;
+}
+.unbox-result {
+	margin-top:30px;
+	text-align:center;
+	color:rgb(218,233,235);
+}
+.unbox-result img {
+	width:400px;
+	margin-top:10px;
+}
+.use-case-btn {
+	font-size:18px;
+	padding:10px;
+	cursor:pointer;
+	border:none;
+	background-color:pink;
+	color:white;
+	border-radius:5px;
+}
+.gif-inventory {
+	padding-top:15px;
+	text-align:left;
+	margin-top:10px;
+}
+.inventory-container {
+	margin-top:15px;
+	display:flex;
+	flex-direction:column;
+	align-items:left;
+	color:rgb(218,233,235);
+}
 .inventory-item {
-  display: flex;
-  align-items: left;
-  gap: 15px;
-  margin-bottom: 10px;
+	display:flex;
+	align-items:left;
+	gap:15px;
+	margin-bottom:10px;
+}
+.prc-btn {
+	font-size:18px;
+	padding:10px;
+	display:flex;
+	align-items:left;
+	cursor:pointer;
+	border:none;
+	background-color:pink;
+	color:white;
+	border-radius:5px;
+}
+.prc-display{
+    display: none; 
+    flex-wrap: wrap; 
+    gap: 12px; 
+    margin-top: 16px;
 }
