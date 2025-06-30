@@ -1,4 +1,5 @@
 
+
 const lootTable = {
   "Exceedingly Rare": {
     chance: 0.26,
@@ -204,7 +205,7 @@ function renderInventory() {
 
 itemDiv.innerHTML = `
   <div class="inventory-side">
-    <img src="${data.src}" alt="${name}" class="rarity-border ${lowerRarity}-border" style="width: 100px;">
+    <img src="${data.src}" alt="${name}" class="inventory-gif rarity-border ${lowerRarity}-border" data-name="${name}" style="width: 100px;">
     <span class="inventory-count">x${data.count}</span>
     <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} coins" data-name="${name}">Sell</button>
   </div>
@@ -325,15 +326,35 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
     const panel = document.getElementById("loot-panel");
     const button = document.getElementById("toggle-loot-panel");
 
-    if (panel.style.display === "none") {
-        renderLootPanel();
-        panel.style.display = "flex";
-        button.textContent = "Hide %";
-    } else {
-        panel.style.display = "none";
-        button.textContent = "Show %";
-    }
+   const isHidden = getComputedStyle(panel).display === "none";
+
+if (isHidden) {
+  renderLootPanel();
+  panel.style.display = "flex";
+  button.textContent = "Hide %";
+} else {
+  panel.style.display = "none";
+  button.textContent = "Show %";
+}
 });
+
+const modal = document.getElementById("gif-modal");
+const modalImage = document.getElementById("modal-image");
+
+document.addEventListener("click", function (e) {
+  if (
+    e.target &&
+    (e.target.id === "reveal-gif" || e.target.classList.contains("inventory-gif"))
+  ) {
+    modalImage.src = e.target.src;
+    modal.style.display = "flex";
+  } else if (e.target && e.target.id === "gif-modal") {
+    modal.style.display = "none";
+  }
+
+});
+
+
 
 
 
@@ -342,10 +363,11 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // % somewhere                                                                          --added
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make it more mobile friendly                                                         --fixed
-// show % needs two clicks
+// show % needs two clicks                                                              --fixed
 // make better unboxing animation                                                       --semi fixed lol     
-// stats page
-// being able to view gifs unboxed (expand them)   
+// stats page (will break current saves </3)
+// save fixer that adds non given values as 0 (will probably break stuff too)
+// being able to view gifs unboxed (expand them by clicking on yk)   
 // numbers - +                                                                          -- added
 // add money per min
 // make money sticky on top right? idk yet
@@ -353,17 +375,17 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 
 // later problems lol
 // sell value                                                                           --added but to be adjusted
-// tooltips for value                                                                   --added
+// tooltips for value                                                                   --added, doesnt work on mobile sadge
 // upgrades
 // ig very easy to edit saves but like I dont really care lol
 
 
 
 // ---Upgrade Ideas--
-// multi spin
+// multi spin (probably not gonna add but idk)
 // more cash per click 
 // faster spin
 // better odds? (maybe jsut new case tbh)
 // auto spin 
-// passive income (you hire ppl to spin (no actual cost for you) can upgrade what they can get, start of with max pink)
+// passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max pink)
 // 

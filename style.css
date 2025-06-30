@@ -174,6 +174,7 @@ body {
   padding: 10px 16px;
   border-radius: 5px;
   cursor: pointer;
+   display: none;
 }
 
 
@@ -240,3 +241,22 @@ body {
 
 }
 
+#gif-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#modal-image {
+  max-width: 70vw;
+  max-height: 70vh;
+  object-fit: contain;
+}
