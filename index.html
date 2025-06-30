@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silliness Unboxer!</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+
+    <div class="headline-container">
+        <img src="https://transrats.neocities.org/blinkies/yippee.gif" class="side-gif" alt="Left GIF">
+        <h1 class="headline">Silliness Unboxer!</h1>
+        <img src="https://transrats.neocities.org/buttons/non-people/dokocat.gif" class="side-gif" alt="Right GIF">
+    </div>
+
+    <div class="counter-container">
+        <p class="text">Silly Coins: <span id="coin-counter">0</span></p>
+        <img id="silly-button" src="https://silly.possiblyaxolotl.com/tbhspin.gif"
+             class="silly-gif" alt="Spinny GIF">
+    </div>
+
+    <div class="button-container">
+        <div class="deduct-container">
+            <p class="text">Buy Silly Case ^o^</p>
+            <img id="deduct-button" src="https://preview.redd.it/i-made-steamhappy-vector-image-v0-jmmqmwzwk14c1.png?width=800&format=png&auto=webp&s=7cc8498450fbd323b22899722ac24cbd23a91a83"
+                 class="deduct-gif" alt="Deduct Coins">
+        </div>
+
+        
+        <button id="use-case-btn" class="use-case-btn">Use Case</button>
+    </div>
+
+    <div id="unbox-result" class="unbox-result">
+  <p>You unboxed:</p>
+  <img id="reveal-gif" src="case_one/spinnyspheal.gif" alt="Reveal" width="300">
+</div>
+
+    <div class="cases-container">
+        <p class="text">Cases</p>
+        <p class="text">Silly Case x <span id="case-total">0</span></p>
+    </div>
+
+
+    <div class="gif-inventory">
+        <p class="text">Inventory</p>
+        <div id="inventory-container" class="inventory-container"></div>
+
+    </div>
+
+    <textarea id="save-string" placeholder="Paste your save code here..."></textarea>
+<br>
+<button onclick="saveProgress()">Save Progress</button>
+<button onclick="loadProgress()">Load Progress</button>
+
+
+    
+<script src="script.js"></script>
+</body>
+</html>
