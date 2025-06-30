@@ -114,7 +114,7 @@ document.getElementById("use-case-btn").addEventListener("click", function () {
 
         const resultDiv = document.getElementById("unbox-result");
         resultDiv.innerHTML = `
-        
+            <p> You unboxed:</p>
             <img id="reveal-gif" src="spinnyspheal.gif" width="300" alt="Reveal">
             `;
 
@@ -259,8 +259,9 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
     }
 });
 
-// add buffer to prevent being able to spam case before animation is finished           --fixed
-// make better unboxing animation                                                       
-// make it more mobile friendly                                                         
+// add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
 // inv spoils pull                                                                      --fixed finally
 // % somewhere                                                                          --added
+// lock page so it stops bopping up and down depending on gif size lol                  --fixed
+// make better unboxing animation                                                       
+// make it more mobile friendly     
