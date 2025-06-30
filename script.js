@@ -357,35 +357,40 @@ document.addEventListener("click", function (e) {
 
 
 
-
+// add save system                                                                      --added
 // add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
 // inv spoils pull                                                                      --fixed finally
 // % somewhere                                                                          --added
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks                                                              --fixed
-// make better unboxing animation                                                       --semi fixed lol     
-// stats page (will break current saves </3)
-// save fixer that adds non given values as 0 (will probably break stuff too)
-// being able to view gifs unboxed (expand them by clicking on yk)   
-// numbers - +                                                                          -- added
-// add money per min
-// make money sticky on top right? idk yet
-// sell duplicates, auto sell under x rarity, bulk sell (as in 1,10,all per button changable)
+// make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
+// stats page (will break current saves </3)                                            
+// save fixer that adds non given values as 0 (will probably break stuff too)              
+// being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
+// numbers - +                                                                          --added
+// make money sticky on top right? idk yet                                              
+// sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   
 
-// later problems lol
+// ---------later problems(seems like too much work rn)---------
 // sell value                                                                           --added but to be adjusted
 // tooltips for value                                                                   --added, doesnt work on mobile sadge
 // upgrades
 // ig very easy to edit saves but like I dont really care lol
-
-
+// add money per min
+// inv filter options
+// vibrate on rare pulls for mobile (with toggle somwhere ig options menu)
+// sounds?
+// rare cold coin cookie clicker ahh gold cookie
+// pity system? genshin impact ahh idea 
+// allow button to be hold for like 8cps (mobile)
 
 // ---Upgrade Ideas--
 // multi spin (probably not gonna add but idk)
 // more cash per click 
 // faster spin
 // better odds? (maybe jsut new case tbh)
-// auto spin 
 // passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max pink)
-// 
+//unlock case queue for afking also with this auto spin 
+// crit hits, and then also  damage upgrades and crit % upgrades
+// upgradeable chance to double the drop, up to like 10%?
