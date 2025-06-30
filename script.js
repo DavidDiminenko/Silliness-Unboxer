@@ -122,19 +122,19 @@ document.getElementById("inventory-container").addEventListener("click", functio
       const itemData = getItemDataByName(itemName);
       const value = itemData?.value || 0;
 
-      // Update Silly Coins
+
       sillyCoins += value;
 
-      // Decrement or remove the item from inventory
+
       inventory[itemName].count--;
       if (inventory[itemName].count <= 0) {
         delete inventory[itemName];
       }
 
-      // 💸 Show floating "+X" animation at cursor
+
       showFloatingCoins(e.clientX, e.clientY, `+${value}`, "#00ff66");
 
-      // Refresh UI
+
       document.getElementById("coin-counter").textContent = sillyCoins;
       renderInventory();
     }
