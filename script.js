@@ -76,14 +76,30 @@ function getRandomItem() {
     }
 }
 
-document.getElementById("silly-button").addEventListener("click", function () {
-    sillyCoins++;
-    document.getElementById("coin-counter").textContent = sillyCoins;
+document.getElementById("silly-button").addEventListener("click", function (e) {
+  sillyCoins++;
+  document.getElementById("coin-counter").textContent = sillyCoins;
+
+  const valueOfClick = 1; // maybe dynamic later for upgrades?
+  showFloatingCoins(e.clientX, e.clientY, `+${valueOfClick}`);
 });
 
-document.getElementById("deduct-button").addEventListener("click", function () {
-    if (sillyCoins >= 5) {
-        sillyCoins -= 5;
+
+function showFloatingCoins(x, y, text, color = "#00ff66") {
+  const float = document.createElement("div");
+  float.className = "coin-float";
+  float.textContent = text;
+  float.style.color = color;
+  float.style.left = `${x + (Math.random() * 40 - 20)}px`;
+  float.style.top = `${y + (Math.random() * 20 - 40)}px`;
+
+  document.body.appendChild(float);
+  setTimeout(() => float.remove(), 1000);
+}
+document.getElementById("deduct-button").addEventListener("click", function (event) {
+    if (sillyCoins >= 3) {
+        sillyCoins -= 3;
+        showFloatingCoins(event.clientX, event.clientY, "-3", "#ff3333");
         sillyCaseCount++; // increase case count
         updateCaseDisplay();
     } else {
@@ -276,8 +292,9 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks
 // ig very easy to edit saves but like I dont really care lol
-// make better unboxing animation             
+// make better unboxing animation                                                       --semi fixed lol     
 // stats page
-// being able to view gifs unboxed    
-// silly cursors? maybe
-//
+// being able to view gifs unboxed (expand them)   
+// numbers - + 
+// sell value
+// upgrades

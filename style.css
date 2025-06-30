@@ -191,3 +191,23 @@ body {
   border-color: #FFD700;
   box-shadow: 0 0 25px #FFD700;
 }
+
+.coin-float {
+  position: absolute;
+  color: #039103;
+  font-weight: bold;
+  font-size: 30px;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.2);
+  }
+}
