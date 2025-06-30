@@ -1,50 +1,50 @@
 
 const lootTable = {
-    // case % and items and all that
-    "Exceedingly Rare": {
-        chance: 0.26,
-        items: [{ name: "gay", src: "case_one/gay.gif", alt: "gay" }],
-    },
-    Covert: {
-        chance: 0.64,
-        items: [
-            { name: "shinyspheal", src: "case_one/shinyspheal.gif", alt: "shinyspheal" },
-            { name: "hatsunedmiku", src: "case_one/hatsunedmiku.gif", alt: "hatsunedmiku" },
-        ],
-    },
-    Classified: {
-        chance: 3.2,
-        items: [
-            { name: "teto", src: "case_one/teto.gif", alt: "teto" },
-            { name: "badapple", src: "case_one/badapple.gif", alt: "badapple" },
-            { name: "shpealfriendshape", src: "case_one/shpealfriendshape.gif", alt: "shpealfriendshaped" },
-        ],
-    },
-    Restricted: {
-        chance: 15.98,
-        items: [
-            { name: "squish", src: "case_one/squish.gif", alt: "squish" },
-            { name: "mcr", src: "case_one/mcr.gif", alt: "mcr" },
-            { name: "greenday", src: "case_one/greenday.gif", alt: "greenday" },
-            { name: "blackparade", src: "case_one/blackparade.gif", alt: "blackparade" },
-            { name: "pikagirl", src: "case_one/pikagirl.gif", alt: "pikagirl" },
-        ],
-    },
-    "Mil-Spec": {
-        chance: 79.92,
-        items: [
-            { name: "212", src: "case_one/212.gif", alt: "212" },
-            { name: "besilly", src: "case_one/besilly.gif", alt: "besilly" },
-            { name: "bleed", src: "case_one/bleed.gif", alt: "bleed" },
-            { name: "tetris", src: "case_one/tetris.gif", alt: "tetris" },
-            { name: "getsilly", src: "case_one/getsilly.gif", alt: "getsilly" },
-            { name: "kibty", src: "case_one/kibty.gif", alt: "kibty" },
-            { name: "pvz", src: "case_one/pvz.gif", alt: "pvz" },
-            { name: "microwave", src: "case_one/microwave.gif", alt: "microwave" },
-        ],
-    },
+  "Exceedingly Rare": {
+    chance: 0.26,
+    items: [
+      { name: "gay", src: "case_one/gay.gif", alt: "gay", value: 600 },
+    ],
+  },
+  Covert: {
+    chance: 0.64,
+    items: [
+      { name: "shinyspheal", src: "case_one/shinyspheal.gif", alt: "shinyspheal", value: 150 },
+      { name: "hatsunedmiku", src: "case_one/hatsunedmiku.gif", alt: "hatsunedmiku", value: 150 },
+    ],
+  },
+  Classified: {
+    chance: 3.2,
+    items: [
+      { name: "teto", src: "case_one/teto.gif", alt: "teto", value: 45 },
+      { name: "badapple", src: "case_one/badapple.gif", alt: "badapple", value: 45 },
+      { name: "shpealfriendshape", src: "case_one/shpealfriendshape.gif", alt: "shpealfriendshaped", value: 45 },
+    ],
+  },
+  Restricted: {
+    chance: 15.98,
+    items: [
+      { name: "squish", src: "case_one/squish.gif", alt: "squish", value: 15 },
+      { name: "mcr", src: "case_one/mcr.gif", alt: "mcr", value: 15 },
+      { name: "greenday", src: "case_one/greenday.gif", alt: "greenday", value: 15 },
+      { name: "blackparade", src: "case_one/blackparade.gif", alt: "blackparade", value: 15 },
+      { name: "pikagirl", src: "case_one/pikagirl.gif", alt: "pikagirl", value: 15 },
+    ],
+  },
+  "Mil-Spec": {
+    chance: 79.92,
+    items: [
+      { name: "212", src: "case_one/212.gif", alt: "212", value: 6 },
+      { name: "besilly", src: "case_one/besilly.gif", alt: "besilly", value: 6 },
+      { name: "bleed", src: "case_one/bleed.gif", alt: "bleed", value: 6 },
+      { name: "tetris", src: "case_one/tetris.gif", alt: "tetris", value: 6 },
+      { name: "getsilly", src: "case_one/getsilly.gif", alt: "getsilly", value: 6 },
+      { name: "kibty", src: "case_one/kibty.gif", alt: "kibty", value: 6 },
+      { name: "pvz", src: "case_one/pvz.gif", alt: "pvz", value: 6 },
+      { name: "microwave", src: "case_one/microwave.gif", alt: "microwave", value: 6 },
+    ],
+  },
 };
-
 const rarityOrder = ["Exceedingly Rare", "Covert", "Classified", "Restricted", "Mil-Spec"];
 
 const useCaseBtn = document.getElementById("use-case-btn");
@@ -90,12 +90,18 @@ function showFloatingCoins(x, y, text, color = "#00ff66") {
   float.className = "coin-float";
   float.textContent = text;
   float.style.color = color;
-  float.style.left = `${x + (Math.random() * 40 - 20)}px`;
-  float.style.top = `${y + (Math.random() * 20 - 40)}px`;
+
+  // Generate a small random offset within ±12.5px
+  const offsetX = (Math.random() - 0.5) * 25;
+  const offsetY = (Math.random() - 0.5) * 25;
+  
+float.style.left = `${x + window.scrollX + offsetX}px`;
+float.style.top = `${y + window.scrollY + offsetY}px`;
 
   document.body.appendChild(float);
   setTimeout(() => float.remove(), 1000);
 }
+
 document.getElementById("deduct-button").addEventListener("click", function (event) {
     if (sillyCoins >= 3) {
         sillyCoins -= 3;
@@ -107,6 +113,34 @@ document.getElementById("deduct-button").addEventListener("click", function (eve
     }
     document.getElementById("coin-counter").textContent = sillyCoins;
 });
+
+document.getElementById("inventory-container").addEventListener("click", function (e) {
+  if (e.target.classList.contains("sell-btn")) {
+    const itemName = e.target.getAttribute("data-name");
+
+    if (inventory[itemName]) {
+      const itemData = getItemDataByName(itemName);
+      const value = itemData?.value || 0;
+
+      // Update Silly Coins
+      sillyCoins += value;
+
+      // Decrement or remove the item from inventory
+      inventory[itemName].count--;
+      if (inventory[itemName].count <= 0) {
+        delete inventory[itemName];
+      }
+
+      // 💸 Show floating "+X" animation at cursor
+      showFloatingCoins(e.clientX, e.clientY, `+${value}`, "#00ff66");
+
+      // Refresh UI
+      document.getElementById("coin-counter").textContent = sillyCoins;
+      renderInventory();
+    }
+  }
+});
+
 
 document.getElementById("use-case-btn").addEventListener("click", function () {
     if (sillyCaseCount > 0) {
@@ -144,6 +178,14 @@ document.getElementById("use-case-btn").addEventListener("click", function () {
     }
 });
 
+function getItemDataByName(name) {
+  for (const rarity in lootTable) {
+    const item = lootTable[rarity].items.find(i => i.name === name);
+    if (item) return item;
+  }
+  return null;
+}
+
 function renderInventory() {
   const container = document.getElementById("inventory-container");
   container.innerHTML = "";
@@ -160,10 +202,11 @@ function renderInventory() {
     const rarityName = rarityOrder[data.rarityIndex];
     const lowerRarity = rarityName.toLowerCase().replace(/\s/g, "");
 
-    itemDiv.innerHTML = `
+itemDiv.innerHTML = `
   <div class="inventory-side">
     <img src="${data.src}" alt="${name}" class="rarity-border ${lowerRarity}-border" style="width: 100px;">
     <span class="inventory-count">x${data.count}</span>
+    <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} coins" data-name="${name}">Sell</button>
   </div>
 `;
     container.appendChild(itemDiv);
@@ -300,10 +343,24 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks
-// ig very easy to edit saves but like I dont really care lol
 // make better unboxing animation                                                       --semi fixed lol     
 // stats page
 // being able to view gifs unboxed (expand them)   
 // numbers - +                                                                          -- added
+
+// later problems lol
 // sell value
+// tooltips for value
 // upgrades
+// ig very easy to edit saves but like I dont really care lol
+
+
+
+// ---Upgrade Ideas--
+// multi spin
+// more cash per click 
+// faster spin
+// better odds? (maybe jsut new case tbh)
+// auto spin 
+// passive income (you hire ppl to spin (no actual cost for you) can upgrade what they can get, start of with max pink)
+// 

@@ -164,8 +164,19 @@ body {
   .prc-btn {
     width: 100%;
     font-size: 16px;
-  }
+  } 
+
 }
+#loot-panel {
+  color: rgb(218, 233, 235); 
+  border: none;
+  font-size: 18px;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
 .rarity-border {
   border: 6px solid;
   border-radius: 12px;
@@ -217,3 +228,15 @@ body {
     transform: translateY(-60px) scale(1.2);
   }
 }
+
+.sell-btn {
+  background-color: rgb(255, 105, 105);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+
+}
+
