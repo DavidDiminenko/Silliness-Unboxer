@@ -160,3 +160,34 @@ body {
     font-size: 16px;
   }
 }
+.rarity-border {
+  border: 6px solid;
+  border-radius: 12px;
+  box-shadow: 0 0 18px;
+  margin-top: 10px;
+}
+
+.mil-spec-border {
+  border-color: #4B69FF;
+  box-shadow: 0 0 25px #4B69FF;
+}
+
+.restricted-border {
+  border-color: #8847FF;
+  box-shadow: 0 0 25px #8847FF;
+}
+
+.classified-border {
+  border-color: #D32CE6;
+  box-shadow: 0 0 25px #D32CE6;
+}
+
+.covert-border {
+  border-color: #EB4B4B;
+  box-shadow: 0 0 25px #EB4B4B;
+}
+
+.exceedinglyrare-border {
+  border-color: #FFD700;
+  box-shadow: 0 0 25px #FFD700;
+}

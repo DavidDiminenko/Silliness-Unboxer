@@ -151,15 +151,23 @@ const gifPool = [...lootTable["Mil-Spec"].items, ...lootTable["Restricted"].item
 function spinToReveal(finalGif) {
     const display = document.getElementById("reveal-gif");
 
-    let totalCycles = 10; // Number of images shown before final
-    let initialDelay = 150; // Starting interval
-    let delayGrowth = 50; // How much slower each image gets
+    let totalCycles = 10; 
+    let initialDelay = 150; 
+    let delayGrowth = 50; 
 
     function cycle(index) {
         if (index >= totalCycles) {
             display.src = finalGif.src;
             display.alt = finalGif.alt;
-            return;
+
+             let rarity = Object.keys(lootTable).find(r =>
+             lootTable[r].items.some(i => i.name === finalGif.name)
+       );
+const lowerRarity = rarity.toLowerCase().replace(/\s/g, "");
+display.className = `rarity-border ${lowerRarity}-border`;
+
+
+    return;
         }
 
         const randomGif = gifPool[Math.floor(Math.random() * gifPool.length)];
@@ -221,7 +229,7 @@ function loadProgress() {
         alert("Invalid save string");
     }
 }
-// Builds the loot panel content
+
 function renderLootPanel() {
     const panel = document.getElementById("loot-panel");
     panel.innerHTML = "";
@@ -259,9 +267,17 @@ document.getElementById("toggle-loot-panel").addEventListener("click", () => {
     }
 });
 
+
+
 // add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
 // inv spoils pull                                                                      --fixed finally
 // % somewhere                                                                          --added
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
-// make better unboxing animation                                                       
 // make it more mobile friendly                                                         --fixed
+// show % needs two clicks
+// ig very easy to edit saves but like I dont really care lol
+// make better unboxing animation             
+// stats page
+// being able to view gifs unboxed    
+// silly cursors? maybe
+//
