@@ -62,7 +62,14 @@ let rarityStats = {
   "Restricted": 0,
   "Mil-Spec": 0
 };
+let cursorX = 0;
+let cursorY = 0;
 
+// mouse cursor control
+document.addEventListener("mousemove", (e) => {
+  cursorX = e.clientX;
+  cursorY = e.clientY;
+});
 // ===dom elements===
 // Buttons
 const useCaseBtn = document.getElementById("use-case-btn");
@@ -78,6 +85,7 @@ const statsPanel = document.getElementById("stats-panel");
 const lootPanel = document.getElementById("loot-panel");
 const resultDiv = document.getElementById("unbox-result");
 const caseDisplay = document.getElementById("case-total");
+
 
 // modal elems
 const modal = document.getElementById("gif-modal");
@@ -122,7 +130,7 @@ function getRandomItem() {
 
 // ===coins animation===
 
-function showFloatingCoins(x, y, text, color = "#00ff66") {
+function showFloatingCoins(text, color = "#00ff66") {
   const float = document.createElement("div");
   float.className = "coin-float";
   float.textContent = text;
@@ -130,18 +138,21 @@ function showFloatingCoins(x, y, text, color = "#00ff66") {
 
   const offsetX = (Math.random() - 0.5) * 30;
   const offsetY = (Math.random() - 0.5) * 30;
-  float.style.left = `${x + window.scrollX + offsetX}px`;
-  float.style.top = `${y + window.scrollY + offsetY}px`;
+  float.style.left = `${cursorX + window.scrollX + offsetX}px`;
+  float.style.top = `${cursorY + window.scrollY + offsetY}px`;
 
   document.body.appendChild(float);
   setTimeout(() => float.remove(), 1000);
 }
 
-function earnCoins(amount, x, y, color = "#00ff66") {
+function earnCoins(amount, silentFloat = false, color = "#00ff66") {
   sillyCoins += amount;
   lifetimeCoins += amount;
   coinCounter.textContent = sillyCoins;
-  showFloatingCoins(x, y, `+${amount}`, color);
+
+  if (!silentFloat) {
+    showFloatingCoins(`+${amount}`, color);
+  }
 }
 
 function spinToReveal(finalGif) {
@@ -183,20 +194,20 @@ function spinToReveal(finalGif) {
 // ===gameplay event listeners===
 
 // clicker
-sillyBtn.addEventListener("click", function (e) {
+sillyBtn.addEventListener("click", function () {
   sillyCoins++;
   lifetimeCoins++;
   coinCounter.textContent = sillyCoins;
-  showFloatingCoins(e.clientX, e.clientY, "+1");
+  showFloatingCoins("+1");
 });
 
 // buy case
-deductBtn.addEventListener("click", function (e) {
+deductBtn.addEventListener("click", function () {
   if (sillyCoins >= 3) {
     sillyCoins -= 3;
     sillyCaseCount++;
     updateCaseDisplay();
-    showFloatingCoins(e.clientX, e.clientY, "-3", "#ff3333");
+    showFloatingCoins("-3", "#ff3333"); 
     coinCounter.textContent = sillyCoins;
   } else {
     alert("Not enough Silly Coins!");
@@ -369,12 +380,12 @@ inventoryContainer.addEventListener("click", function (e) {
       const item = inventory[itemName];
       const amountToSell = bulkAmount === -1 ? item.count : Math.min(item.count, bulkAmount);
 
-      if (amountToSell <= 0) return; // prevents selling when there's nothing to sell
+      if (amountToSell <= 0) return; 
 
       item.count -= amountToSell;
       if (item.count <= 0) delete inventory[itemName];
 
-      earnCoins(value * amountToSell, e.clientX, e.clientY);
+      earnCoins(value * amountToSell); 
       renderInventory();
       renderStatsPanel();
     }
@@ -383,39 +394,46 @@ inventoryContainer.addEventListener("click", function (e) {
 
 // sell dupes
 function sellDuplicates() {
+  let totalEarned = 0;
+
   for (const [name, item] of Object.entries(inventory)) {
     if (item.count > 1) {
       const extra = item.count - 1;
       const value = getItemDataByName(name).value || 0;
-
-      earnCoins(extra * value, 0, 0); 
+      totalEarned += extra * value;
       item.count = 1;
     }
   }
+
+  earnCoins(totalEarned, true); // silentFloat enabled
+  showFloatingCoins(`+${totalEarned}`, "#00ff66"); // summary float
   renderInventory();
   renderStatsPanel();
   coinCounter.textContent = sillyCoins;
 }
+
 
 //sell under rarity
 function sellUnderRarity(rarityName) {
   const threshold = rarityOrder.indexOf(rarityName);
+  let totalEarned = 0;
+
+  console.log(`Selected rarity: ${rarityName}, threshold index: ${threshold}`);
 
   for (const [name, item] of Object.entries(inventory)) {
-    if (item.rarityIndex > threshold) {                   //my array has been the wrong way this whole time and flipping it would break too many things so shush you dont see this 
+    if (item.rarityIndex > threshold) {
       const value = getItemDataByName(name).value || 0;
-
-      console.log(`Selected rarity: ${rarityName}, threshold index: ${threshold}`);
-      earnCoins(item.count * value, 0, 0); 
+      totalEarned += item.count * value;
       delete inventory[name];
     }
   }
 
+  earnCoins(totalEarned, true); // silent payout
+  showFloatingCoins(`+${totalEarned}`, "#00ff66"); // summary float
   renderInventory();
   renderStatsPanel();
   coinCounter.textContent = sillyCoins;
 }
-
 // bulk sell
 let bulkAmount = 1; 
 
@@ -484,10 +502,12 @@ function loadProgress() {
 // numbers - +                                                                          --added
 // make money sticky                                                                    --added             
 
+// fully rewrote the structure to make it easier to understand and to work with, this was cancer
+
 // ---------later problems(seems like too much work rn)---------
 // sell value                                                                           --added but to be adjusted
 // tooltips for value                                                                   --added, doesnt work on mobile sadge
-// sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)  
+// sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   --added
 // upgrades
 // ig very easy to edit saves but like I dont really care lol
 // add money per min
