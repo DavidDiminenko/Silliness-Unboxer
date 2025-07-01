@@ -25,12 +25,14 @@
 
 
       <div class="counter-container">
-         <p class="text">
+         <p class="coin-text">
             Silly Coins:
             <span id="coin-counter">
                0
             </span>
          </p>
+      </div>
+      <div>
          <img id="silly-button" src="https://silly.possiblyaxolotl.com/tbhspin.gif"
          class="silly-gif" alt="Spinny GIF">
       </div>
@@ -68,6 +70,25 @@
          <p class="text">
             Inventory
          </p>
+
+<div class="sell-controls">
+  <button onclick="sellDuplicates()">Sell Duplicates</button>
+  <select onchange="sellUnderRarity(this.value)">
+    <option disabled selected>Sell under Rarity</option>
+    <option value="Exceedingly Rare">Exceedingly Rare</option>
+    <option value="Covert">Covert</option>
+    <option value="Classified">Classified</option>
+    <option value="Restricted">Restricted</option>
+    <option value="Mil-Spec">Mil-Spec</option>
+  </select>
+  <select onchange="setBulkAmount(this.value)">
+    <option disabled selected>Bulk Amount</option>
+    <option value="1">1</option>
+    <option value="10">10</option>
+    <option value="100">100</option>
+    <option value="all">All</option>
+  </select>
+</div>
 
          <div id="inventory-container" class="inventory-container">
          </div>

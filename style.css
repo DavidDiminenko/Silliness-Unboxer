@@ -25,12 +25,22 @@ body {
 }
 
 .counter-container {
+  position: sticky;
+  z-index: 10;
+  top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   justify-content: center;
   margin-top: 20px;
+
+}
+.coin-text{
+font-size: 24px;
+font-weight: bold;
+color: rgb(218, 233, 235);
+text-shadow: 0 0 5px black;
 }
 
 .button-container {
@@ -43,7 +53,9 @@ body {
 .silly-gif {
   cursor: pointer;
   width: 200px;
+
 }
+
 
 .deduct-gif {
   cursor: pointer;
