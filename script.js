@@ -47,11 +47,21 @@ const lootTable = {
   },
 };
 const rarityOrder = ["Exceedingly Rare", "Covert", "Classified", "Restricted", "Mil-Spec"];
-
 const useCaseBtn = document.getElementById("use-case-btn");
+// variables/stats to be counted
 let inventory = {};
 let sillyCoins = 0;
+let lifetimeCoins = 0;
 let sillyCaseCount = 0;
+let casesOpenend = 0;
+let bestUnbox = null;
+let rarityStats = {
+  "Exceedingly Rare": 0,
+  "Covert": 0,
+  "Classified": 0,
+  "Restricted": 0,
+  "Mil-Spec": 0
+};
 
 function getRarityIndex(itemName) {
     for (let i = 0; i < rarityOrder.length; i++) {
@@ -79,6 +89,7 @@ function getRandomItem() {
 
 document.getElementById("silly-button").addEventListener("click", function (e) {
   sillyCoins++;
+  lifetimeCoins++;
   document.getElementById("coin-counter").textContent = sillyCoins;
 
   const valueOfClick = 1; // maybe dynamic later for upgrades?
@@ -92,9 +103,9 @@ function showFloatingCoins(x, y, text, color = "#00ff66") {
   float.textContent = text;
   float.style.color = color;
 
-  // Generate a small random offset within ±12.5px
-  const offsetX = (Math.random() - 0.5) * 25;
-  const offsetY = (Math.random() - 0.5) * 25;
+  
+  const offsetX = (Math.random() - 0.5) * 30;
+  const offsetY = (Math.random() - 0.5) * 30;
 
 float.style.left = `${x + window.scrollX + offsetX}px`;
 float.style.top = `${y + window.scrollY + offsetY}px`;
@@ -125,6 +136,7 @@ document.getElementById("inventory-container").addEventListener("click", functio
 
 
       sillyCoins += value;
+      lifetimeCoins+= value;
 
 
       inventory[itemName].count--;
@@ -146,9 +158,19 @@ document.getElementById("inventory-container").addEventListener("click", functio
 document.getElementById("use-case-btn").addEventListener("click", function () {
     if (sillyCaseCount > 0) {
         sillyCaseCount--; // decrease case count
+        casesOpenend++;
         updateCaseDisplay();
 
         let unboxedItem = getRandomItem();
+        let itemValue = getItemDataByName(unboxedItem.name).value || 0;
+let rarityName = Object.keys(lootTable).find(r => 
+  lootTable[r].items.some(i => i.name === unboxedItem.name)
+);
+rarityStats[rarityName]++;
+
+if (!bestUnbox || itemValue > bestUnbox.value) {
+  bestUnbox = { name: unboxedItem.name, value: itemValue, rarity: rarityName };
+}
 
         if (inventory[unboxedItem.name]) {
             inventory[unboxedItem.name].count++;
@@ -199,7 +221,6 @@ function renderInventory() {
     const itemDiv = document.createElement("div");
     itemDiv.className = "inventory-item";
 
-    // Get rarity class
     const rarityName = rarityOrder[data.rarityIndex];
     const lowerRarity = rarityName.toLowerCase().replace(/\s/g, "");
 
@@ -207,7 +228,7 @@ itemDiv.innerHTML = `
   <div class="inventory-side">
     <img src="${data.src}" alt="${name}" class="inventory-gif rarity-border ${lowerRarity}-border" data-name="${name}" style="width: 100px;">
     <span class="inventory-count">x${data.count}</span>
-    <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} coins" data-name="${name}">Sell</button>
+    <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} Silly Coins" data-name="${name}">Sell</button>
   </div>
 `;
     container.appendChild(itemDiv);
@@ -248,7 +269,7 @@ display.className = `rarity-border ${lowerRarity}-border`;
 }
 
 function updateCaseDisplay() {
-    document.getElementById("case-total").textContent = sillyCaseCount; // Update total count
+    document.getElementById("case-total").textContent = sillyCaseCount; // update total count
 }
 
 let keyBuffer = [];
@@ -265,37 +286,6 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-function saveProgress() {
-    const gameData = {
-        sillyCoins,
-        sillyCaseCount,
-        inventory,
-    };
-
-    const json = JSON.stringify(gameData);
-    const base64 = btoa(json);
-    document.getElementById("save-string").value = base64;
-}
-
-function loadProgress() {
-    try {
-        const base64 = document.getElementById("save-string").value.trim();
-        const json = atob(base64);
-        const gameData = JSON.parse(json);
-
-        sillyCoins = gameData.sillyCoins || 0;
-        sillyCaseCount = gameData.sillyCaseCount || 0;
-        inventory = gameData.inventory || {};
-
-        document.getElementById("coin-counter").textContent = sillyCoins;
-        updateCaseDisplay();
-        renderInventory();
-
-        alert("Progress loaded");
-    } catch (err) {
-        alert("Invalid save string");
-    }
-}
 
 function renderLootPanel() {
     const panel = document.getElementById("loot-panel");
@@ -354,6 +344,74 @@ document.addEventListener("click", function (e) {
 
 });
 
+function renderStatsPanel() {
+  const container = document.getElementById("stats-panel");
+  container.innerHTML = `
+    <p>Total Coins Earned: ${lifetimeCoins}</p>
+    <p>Total Cases Opened: ${casesOpenend}</p>
+    <p>Best Unbox: ${bestUnbox ? `${bestUnbox.name} (${bestUnbox.value} coins, ${bestUnbox.rarity})` : "None yet"}</p>
+    <h4>unbox stats:</h4>
+    <ul>
+      ${Object.entries(rarityStats).map(([rarity, count]) => {
+        const percent = casesOpenend > 0 ? ((count / casesOpenend) * 100).toFixed(1) : "0.0";
+        return `<li>${rarity}: ${count} (${percent}%)</li>`;
+      }).join("")}
+    </ul>
+  `;
+}
+
+document.getElementById("stats-btn").addEventListener("click", () => {
+  const panel = document.getElementById("stats-panel");
+  if (panel.style.display === "none") {
+    renderStatsPanel();
+    panel.style.display = "block";
+  } else {
+    panel.style.display = "none";
+  }
+});
+
+
+function saveProgress() {
+    const gameData = {
+        sillyCoins,
+        sillyCaseCount,
+        inventory,
+        lifetimeCoins,
+        casesOpenend,
+        bestUnbox,
+        rarityStats
+
+    };
+
+    const json = JSON.stringify(gameData);
+    const base64 = btoa(json);
+    document.getElementById("save-string").value = base64;
+}
+
+function loadProgress() {
+    try {
+        const base64 = document.getElementById("save-string").value.trim();
+        const json = atob(base64);
+        const gameData = JSON.parse(json);
+
+        sillyCoins = gameData.sillyCoins || 0;
+        sillyCaseCount = gameData.sillyCaseCount || 0;
+        inventory = gameData.inventory || {};
+        lifetimeCoins = gameData.lifetimeCoins || 0;
+        casesOpenend = gameData.casesOpenend || 0;
+        bestUnbox = gameData.bestUnbox || null;
+        rarityStats = gameData.rarityStats || null
+
+
+        document.getElementById("coin-counter").textContent = sillyCoins;
+        updateCaseDisplay();
+        renderInventory();
+
+        alert("Progress loaded");
+    } catch (err) {
+        alert("Invalid save string");
+    }
+}
 
 
 
@@ -365,11 +423,11 @@ document.addEventListener("click", function (e) {
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks                                                              --fixed
 // make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
-// stats page (will break current saves </3)                                            
+// stats page (will break current saves </3)                                            --added, need to add save integration                      
 // save fixer that adds non given values as 0 (will probably break stuff too)              
 // being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
 // numbers - +                                                                          --added
-// make money sticky on top right? idk yet                                              
+// make money sticky on top right? idk yet                              xx                
 // sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   
 
 // ---------later problems(seems like too much work rn)---------

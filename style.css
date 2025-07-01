@@ -51,7 +51,7 @@ body {
   height: auto;
 }
 
-.text {
+.text{
   font-size: 24px;
   font-weight: bold;
   color: rgb(218, 233, 235);
@@ -241,6 +241,28 @@ body {
 
 }
 
+.stats-btn{
+ background-color: rgb(24, 38, 233);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+.stats-text{
+  position: absolute;
+  font-size: 12px;
+  color: rgb(218, 233, 235);
+  display: flex;
+  text-align: left;
+  line-height: 15px;
+  
+
+}
 #gif-modal {
   display: none;
   position: fixed;
@@ -260,3 +282,4 @@ body {
   max-height: 70vh;
   object-fit: contain;
 }
+
