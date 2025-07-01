@@ -378,13 +378,16 @@ function renderLootPanel() {
       itemDiv.style.backgroundColor = "black";
       itemDiv.style.color = "white";
 
-  
       const img = document.createElement("img");
       img.src = item.src;
       img.alt = item.name;
       img.width = 100;
 
       // Long press logic
+      img.style.userSelect = "none";
+      img.style.webkitUserSelect = "none";
+      img.style.msUserSelect = "none";
+
       let pressTimer;
       img.addEventListener("touchstart", () => {
         pressTimer = setTimeout(() => {
