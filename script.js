@@ -269,9 +269,11 @@ document.addEventListener("keydown", function (e) {
 function renderInventory() {
   inventoryContainer.innerHTML = "";
 
-  const sorted = Object.entries(inventory).sort((a, b) => {
-    return b[1].value - a[1].value; // Sort by descending value
-  });
+const sorted = Object.entries(inventory).sort((a, b) => {
+  const valueA = getItemDataByName(a[0]).value || 0;
+  const valueB = getItemDataByName(b[0]).value || 0;
+  return valueA - valueB;
+});
 
   sorted.forEach(([name, data]) => {
     const rarityName = rarityOrder[data.rarityIndex];
