@@ -255,7 +255,6 @@ useCaseBtn.addEventListener("click", function () {
   resultDiv.innerHTML = `<p>you unboxed:</p><img id="reveal-gif" src="spinnyspheal.gif" width="300" alt="reveal">`;
   spinToReveal(unboxedItem);
 
-  // re-enable after 4300ms to match your animation
   setTimeout(() => {
     renderInventory();
     useCaseBtn.disabled = false;
@@ -416,8 +415,8 @@ function sellDuplicates() {
     }
   }
 
-  earnCoins(totalEarned, true); // silentFloat enabled
-  showFloatingCoins(`+${totalEarned}`, "#00ff66"); // summary float
+  earnCoins(totalEarned, true); 
+  showFloatingCoins(`+${totalEarned}`, "#00ff66"); 
   renderInventory();
   renderStatsPanel();
   coinCounter.textContent = sillyCoins;
@@ -439,8 +438,8 @@ function sellUnderRarity(rarityName) {
     }
   }
 
-  earnCoins(totalEarned, true); // silent payout
-  showFloatingCoins(`+${totalEarned}`, "#00ff66"); // summary float
+  earnCoins(totalEarned, true); 
+  showFloatingCoins(`+${totalEarned}`, "#00ff66"); 
   renderInventory();
   renderStatsPanel();
   coinCounter.textContent = sillyCoins;
@@ -507,7 +506,7 @@ function loadProgress() {
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks                                                              --fixed, same problem with stats button now wtf
-// fix stat btn needing two clicks
+// fix stat btn needing two clicks                cba to fix rn ngl
 // make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
 // stats page (will break current saves </3)                                            --added, need to add save integration                                   
 // being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
