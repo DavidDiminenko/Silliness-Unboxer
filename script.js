@@ -128,6 +128,44 @@ function getRandomItem() {
     }
   }
 }
+// === debug stuff===
+
+function simulateUnboxes(amount) {
+  for (let i = 0; i < amount; i++) {
+    const unboxedItem = getRandomItem();
+    const itemData = getItemDataByName(unboxedItem.name);
+    const rarity = Object.keys(lootTable).find(r =>
+      lootTable[r].items.some(it => it.name === unboxedItem.name)
+    );
+
+    // Update stats
+    casesOpenend++;
+    rarityStats[rarity]++;
+    const value = itemData.value || 0;
+
+    // Check for best unbox
+    if (!bestUnbox || value > bestUnbox.value) {
+      bestUnbox = { name: itemData.name, value, rarity };
+    }
+
+    // Add to inventory
+    if (inventory[itemData.name]) {
+      inventory[itemData.name].count++;
+    } else {
+      inventory[itemData.name] = {
+        count: 1,
+        src: itemData.src,
+        rarityIndex: getRarityIndex(itemData.name),
+      };
+    }
+  }
+
+  renderInventory();
+  renderStatsPanel();
+  coinCounter.textContent = sillyCoins;
+  alert(`${amount} cases simulated and added to your progress.`);
+}
+
 
 // ===coins animation===
 
@@ -263,14 +301,27 @@ useCaseBtn.addEventListener("click", function () {
 
 let keyBuffer = [];
 
+// secrets (not so secret because well anyone can read this )
 document.addEventListener("keydown", function (e) {
   keyBuffer.push(e.key.toLowerCase());
   if (keyBuffer.length > 5) keyBuffer.shift();
 
-  if (keyBuffer.join("") === "silly") {
+  const typed = keyBuffer.join("");
+
+  // Silly cheat: +100 cases
+  if (typed === "silly") {
     sillyCaseCount += 100;
     updateCaseDisplay();
     alert("How did you know!?");
+  }
+
+  // Debug panel toggle
+  if (typed === "debug") {
+    const panel = document.getElementById("debug-panel");
+    const isVisible = panel.style.display === "block";
+
+    panel.style.display = isVisible ? "none" : "block";
+    alert(isVisible ? "Debug Mode Deactivated!" : "Debug Mode Activated");
   }
 });
 
@@ -284,19 +335,19 @@ const sorted = Object.entries(inventory).sort((a, b) => {
 });
 
   sorted.forEach(([name, data]) => {
-    const rarityName = rarityOrder[data.rarityIndex];
-    const lowerRarity = rarityName.toLowerCase().replace(/\s/g, "");
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "inventory-item";
-    itemDiv.innerHTML = `
-      <div class="inventory-side">
-        <img src="${data.src}" alt="${name}" class="inventory-gif rarity-border ${lowerRarity}-border" data-name="${name}" style="width: 100px;">
-        <span class="inventory-count">x${data.count}</span>
-        <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} Silly Coins" data-name="${name}">Sell</button>
-      </div>
-    `;
-    inventoryContainer.prepend(itemDiv);
-  });
+  const rarityName = rarityOrder[data.rarityIndex];
+  const lowerRarity = rarityName.toLowerCase().replace(/\s/g, "");
+  const itemDiv = document.createElement("div");
+  itemDiv.className = "inventory-item";
+  itemDiv.innerHTML = `
+    <div class="inventory-side" style="display: flex; align-items: center; gap: 10px;">
+      <img src="${data.src}" alt="${name}" class="inventory-gif rarity-border ${lowerRarity}-border" data-name="${name}" style="width: 100px;">
+      <span class="inventory-count" style="width: 50px; text-align: right;">x${data.count}</span>
+      <button class="sell-btn" title="Sells for ${getItemDataByName(name).value} Silly Coins" data-name="${name}">Sell</button>
+    </div>
+  `;
+  inventoryContainer.prepend(itemDiv);
+});
 }
 
 document.addEventListener("click", function (e) {
@@ -513,7 +564,8 @@ function loadProgress() {
 // numbers - +                                                                          --added
 // make money sticky                                                                    --added             
 // inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
-// make cases either sticky or higher prob higher up                                    --fixed, how scuffed 
+// make cases either sticky or higher prob higher up                                    
+// basic debug tools                                                                    --added
 
 // fully rewrote the structure to make it easier to understand and to work with, this was cancer
 
@@ -529,6 +581,8 @@ function loadProgress() {
 // add modifiers (blur, colourchange,etc) that gives times X of value
 // rare cold coin cookie clicker ahh gold cookie
 // pity system? genshin impact ahh idea 
+
+
 // ------------mobile stuff------------
 // vibrate on rare pulls (with toggle somwhere ig options menu)
 // allow button to be hold for like 8cps 
