@@ -384,11 +384,11 @@ function renderLootPanel() {
       img.width = 100;
 
       // Long press logic
-      img.style.userSelect = "none";
-      img.style.webkitUserSelect = "none";
+      img.style.webkitTouchCallout = "none"         // guess ill see tmr if this will work lol
+      img.style.UserSelect = "none";
       img.style.msUserSelect = "none";
       img.style.webkitTouchCallout = "none";
-      img.style.touchAction = "manipulation";
+      img.style.touchAction = "manipulation";       // why the fuck doesnt any of this work wtf
 
       let pressTimer;
       img.addEventListener("touchstart", () => {
@@ -606,7 +606,7 @@ function loadProgress() {
 // update number irgendwo hinknallen auf trollig
 // stats open for some reason on debug sim100case and loading save
 // make it obv how to earn coins (arrow,outline,text saying click me to earn points)
-
+// trying to again make it more mobile friendly, not going well
 
 
 
