@@ -361,7 +361,7 @@ document.addEventListener("click", function (e) {
     modal.style.display = "none";
   }
 });
-
+// inv panel
 function renderLootPanel() {
   lootPanel.innerHTML = "";
 
@@ -371,16 +371,48 @@ function renderLootPanel() {
 
     items.forEach(item => {
       const itemDiv = document.createElement("div");
+      itemDiv.className = "loot-item";
       itemDiv.style.padding = "10px";
       itemDiv.style.textAlign = "center";
       itemDiv.style.width = "120px";
       itemDiv.style.backgroundColor = "black";
-      itemDiv.innerHTML = `
-        <div class="loot-item">
-          <img src="${item.src}" alt="${item.name}" width="100">
-          <small>${individualChance.toFixed(2)}%</small>
-        </div>
-      `;
+      itemDiv.style.color = "white";
+
+  
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.alt = item.name;
+      img.width = 100;
+
+      // Long press logic
+      let pressTimer;
+      img.addEventListener("touchstart", () => {
+        pressTimer = setTimeout(() => {
+          alert(`${item.name} is worth ${item.value} Silly Coins`);
+        }, 600);
+      });
+      img.addEventListener("touchend", () => clearTimeout(pressTimer));
+      img.addEventListener("touchcancel", () => clearTimeout(pressTimer));
+
+      // Info text
+      const infoDiv = document.createElement("div");
+      infoDiv.style.marginTop = "4px";
+
+      const chanceText = document.createElement("small");
+      chanceText.textContent = `${individualChance.toFixed(2)}%`;
+      const br = document.createElement("br");
+
+      const valueText = document.createElement("small");
+      valueText.textContent = `${item.value}`;
+
+      // Assemble
+      infoDiv.appendChild(chanceText);
+      infoDiv.appendChild(br);
+      infoDiv.appendChild(valueText);
+
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(infoDiv);
+
       lootPanel.appendChild(itemDiv);
     });
   });
@@ -566,6 +598,14 @@ function loadProgress() {
 // inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
 // make cases either sticky or higher prob higher up                                    
 // basic debug tools                                                                    --added
+// update number irgendwo hinknallen auf trollig
+// stats open for some reason on debug sim100case and loading save
+// make it obv how to earn coins (arrow,outline,text saying click me to earn points)
+
+
+
+
+
 
 // fully rewrote the structure to make it easier to understand and to work with, this was cancer
 
