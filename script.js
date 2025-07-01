@@ -1,5 +1,6 @@
 
 // ===game setup % loot data===
+
 const lootTable = {
   "Exceedingly Rare": {
     chance: 0.26,
@@ -216,10 +217,15 @@ deductBtn.addEventListener("click", function () {
 
 // use case 
 useCaseBtn.addEventListener("click", function () {
+  if (useCaseBtn.disabled) return;
+
   if (sillyCaseCount <= 0) {
-    alert("You don't have any Silly Cases!");
+    alert("you don't have any silly cases!");
     return;
   }
+
+  // disable the button immediately
+  useCaseBtn.disabled = true;
 
   sillyCaseCount--;
   casesOpenend++;
@@ -246,11 +252,14 @@ useCaseBtn.addEventListener("click", function () {
     };
   }
 
-  resultDiv.innerHTML = `<p>You unboxed:</p><img id="reveal-gif" src="spinnyspheal.gif" width="300" alt="Reveal">`;
+  resultDiv.innerHTML = `<p>you unboxed:</p><img id="reveal-gif" src="spinnyspheal.gif" width="300" alt="reveal">`;
   spinToReveal(unboxedItem);
 
-  setTimeout(renderInventory, 4300);
-  
+  // re-enable after 4300ms to match your animation
+  setTimeout(() => {
+    renderInventory();
+    useCaseBtn.disabled = false;
+  }, 4300);
 });
 
 let keyBuffer = [];
@@ -498,11 +507,14 @@ function loadProgress() {
 // lock page so it stops bopping up and down depending on gif size lol                  --fixed
 // make it more mobile friendly                                                         --fixed
 // show % needs two clicks                                                              --fixed, same problem with stats button now wtf
+// fix stat btn needing two clicks
 // make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
 // stats page (will break current saves </3)                                            --added, need to add save integration                                   
 // being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
 // numbers - +                                                                          --added
 // make money sticky                                                                    --added             
+// inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
+// make cases either sticky or higher prob higher up                                    --fixed, how scuffed 
 
 // fully rewrote the structure to make it easier to understand and to work with, this was cancer
 
@@ -528,7 +540,7 @@ function loadProgress() {
 // more cash per click 
 // faster spin
 // better odds? (maybe jsut new case tbh)
-// passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max pink)
+// passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max purple)
 //unlock case queue for afking also with this auto spin 
 // crit hits, and then also  damage upgrades and crit % upgrades
 // upgradeable chance to double the drop, up to like 10%?
