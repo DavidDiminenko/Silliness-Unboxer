@@ -1,0 +1,44 @@
+// add save system                                                                      --added
+// add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
+// inv spoils pull                                                                      --fixed finally
+// % somewhere                                                                          --added
+// lock page so it stops bopping up and down depending on gif size lol                  --fixed
+// make it more mobile friendly                                                         --fixed
+// show % needs two clicks                                                              --fixed, same problem with stats button now wtf
+// fix stat btn needing two clicks                  cba
+// make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
+// stats page (will break current saves </3)                                            --added, need to add save integration                                   
+// being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
+// numbers - +                                                                          --added
+// make money sticky                                                                    --added             
+// inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
+// make cases either sticky or higher prob higher up                                    --fixed, how scuffed 
+
+// fully rewrote the structure to make it easier to understand and to work with, this was cancer
+
+// ---------later problems(seems like too much work rn)---------
+// sell value                                                                           --added but to be adjusted
+// tooltips for value                                                                   --added, doesnt work on mobile sadge
+// sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   --added
+// upgrades
+// ig very easy to edit saves but like I dont really care lol
+// add money per min
+// inv filter options
+// sounds?
+// add modifiers (blur, colourchange,etc) that gives times X of value
+// rare cold coin cookie clicker ahh gold cookie
+// pity system? genshin impact ahh idea 
+// ------------mobile stuff------------
+// vibrate on rare pulls (with toggle somwhere ig options menu)
+// allow button to be hold for like 8cps 
+
+
+// ---Upgrade Ideas--
+// multi spin (probably not gonna add but idk)
+// more cash per click 
+// faster spin
+// better odds? (maybe jsut new case tbh)
+// passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max purple)
+//unlock case queue for afking also with this auto spin 
+// crit hits, and then also  damage upgrades and crit % upgrades
+// upgradeable chance to double the drop, up to like 10%?
