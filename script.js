@@ -387,6 +387,8 @@ function renderLootPanel() {
       img.style.userSelect = "none";
       img.style.webkitUserSelect = "none";
       img.style.msUserSelect = "none";
+      img.style.webkitTouchCallout = "none";
+      img.style.touchAction = "manipulation";
 
       let pressTimer;
       img.addEventListener("touchstart", () => {
