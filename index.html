@@ -17,12 +17,22 @@
          <h1 class="headline">
             Silliness Unboxer!
          </h1>
+         <p class="sillyUpdateText">
+            Ver 1.0.29
+         </p>
          <img src="https://transrats.neocities.org/buttons/non-people/dokocat.gif"
          class="side-gif" alt="Right GIF">
       </div>
+<div class="btn-wrapper">
+  <button id="stats-btn" class="stats-btn">Stats</button>
+  <button id="upgrade-btn" class="upgrade-btn">Upgrades</button>
+</div>
 
-<button id="stats-btn" class="stats-btn"> Stats</button>
 <div id="stats-panel" class="stats-text"></div>
+<div id="upgrade-panel" class="stats-text" style="display:none;">
+  <p id="upgrade-desc">Up cash per click</p>
+  <button id="upgrade-click-btn" class="upgrade-click-btn">Upgrade !</button>
+</div>
 
 
       <div class="counter-container">
@@ -33,12 +43,17 @@
             </span>
          </p>
       </div>
-      <div>
-         <img id="silly-button" src="https://silly.possiblyaxolotl.com/tbhspin.gif"
+<div class="page-wrapper">
+  <div class="silly-container">
+    <img id="silly-button" src="https://silly.possiblyaxolotl.com/tbhspin.gif"
          class="silly-gif" alt="Spinny GIF">
-      </div>
-
-      <div class="button-container">
+    <div class="silly-text-container">
+      <p class="silly-text">click them !</p>
+      <p class="rotate">:3</p>
+    </div>
+  </div>
+</div>
+         <div class="button-container">
          <div class="deduct-container">
             <p class="text">
                Buy Silly Case ^o^
@@ -93,7 +108,7 @@
 </div>
 
 <div id="debug-panel" style="display: none; background-color: #111; color: lime; padding: 10px; margin-top: 10px; border: 1px solid lime;">
-  <h3>Debug Panel 🔧</h3>
+  <h3>Debug Panel</h3>
   <button onclick="earnCoins(1000)">+1000 Coins</button>
    <button onclick="simulateUnboxes(100)">Simulate 100 Unboxes</button>
 </div>

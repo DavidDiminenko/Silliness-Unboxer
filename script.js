@@ -53,6 +53,7 @@ const gifPool = [...lootTable["Mil-Spec"].items, ...lootTable["Restricted"].item
 let inventory = {};
 let sillyCoins = 0;
 let lifetimeCoins = 0;
+let coinsPerClick = 1;
 let sillyCaseCount = 0;
 let casesOpenend = 0;
 let bestUnbox = null;
@@ -77,7 +78,10 @@ const useCaseBtn = document.getElementById("use-case-btn");
 const deductBtn = document.getElementById("deduct-button");
 const sillyBtn = document.getElementById("silly-button");
 const statsBtn = document.getElementById("stats-btn");
+const upgradeBtn = document.getElementById("upgrade-btn");
 const toggleLootBtn = document.getElementById("toggle-loot-panel");
+const upgradeClickBtn = document.getElementById("upgrade-click-btn");
+
 
 //ui panels & cont
 const coinCounter = document.getElementById("coin-counter");
@@ -86,6 +90,7 @@ const statsPanel = document.getElementById("stats-panel");
 const lootPanel = document.getElementById("loot-panel");
 const resultDiv = document.getElementById("unbox-result");
 const caseDisplay = document.getElementById("case-total");
+const upgradePanel = document.getElementById("upgrade-panel");
 
 
 // modal elems
@@ -234,10 +239,10 @@ function spinToReveal(finalGif) {
 
 // clicker
 sillyBtn.addEventListener("click", function () {
-  sillyCoins++;
-  lifetimeCoins++;
+  sillyCoins += coinsPerClick;
+  lifetimeCoins += coinsPerClick;
   coinCounter.textContent = sillyCoins;
-  showFloatingCoins("+1");
+  showFloatingCoins(`+${coinsPerClick}`);
 });
 
 // buy case
@@ -261,8 +266,6 @@ useCaseBtn.addEventListener("click", function () {
     alert("you don't have any silly cases!");
     return;
   }
-
-  // disable the button immediately
   useCaseBtn.disabled = true;
 
   sillyCaseCount--;
@@ -383,8 +386,8 @@ function renderLootPanel() {
       img.alt = item.name;
       img.width = 100;
 
-      // Long press logic
-      img.style.webkitTouchCallout = "none"         // guess ill see tmr if this will work lol
+      // Long press logic I hate iOS dont work idk if it works on android
+      img.style.webkitTouchCallout = "none"         // guess ill see tmr if this will work lol, it didnt
       img.style.UserSelect = "none";
       img.style.msUserSelect = "none";
       img.style.webkitTouchCallout = "none";
@@ -427,7 +430,6 @@ function updateCaseDisplay() {
 }
 
 // ===stats panel===
-
 function renderStatsPanel() {
   statsPanel.innerHTML = `
     <p>Total Coins Earned: ${lifetimeCoins}</p>
@@ -447,9 +449,46 @@ function renderStatsPanel() {
 
 statsBtn.addEventListener("click", () => {
   const isVisible = statsPanel.style.display === "block";
+  if (!isVisible) {
+    
+    if (upgradePanel.style.display === "block") {
+      upgradePanel.style.display = "none";
+    }
+    renderStatsPanel();
+  }
   statsPanel.style.display = isVisible ? "none" : "block";
-  if (!isVisible) renderStatsPanel();
 });
+
+//=== upgrade panel===           
+   
+function updateUpgradePanel() {
+  document.getElementById("upgrade-click-btn").textContent = ` (+1 Cost: ${coinsPerClick * 150})`;
+}
+
+
+upgradeBtn.addEventListener("click", () => {
+  const isVisible = upgradePanel.style.display === "block";
+  if (!isVisible) {
+    if (statsPanel.style.display === "block") {
+      statsPanel.style.display = "none";
+    }
+    updateUpgradePanel();
+  }
+  upgradePanel.style.display = isVisible ? "none" : "block";
+});
+
+upgradeClickBtn.addEventListener("click", () => {
+  const cost = coinsPerClick *150;
+  if (sillyCoins >= cost) {
+    sillyCoins -= cost;
+    coinsPerClick++;
+    coinCounter.textContent = sillyCoins;
+    updateUpgradePanel();
+  } else {
+    alert("Not enough Silly Coins!");
+  }
+});
+
 // ===% panel===
 
 toggleLootBtn.addEventListener("click", () => {
@@ -603,11 +642,15 @@ function loadProgress() {
 // inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
 // make cases either sticky or higher prob higher up                                    
 // basic debug tools                                                                    --added
-// update number irgendwo hinknallen auf trollig
+// update number irgendwo hinknallen auf trollig                                        --added       
 // stats open for some reason on debug sim100case and loading save
-// make it obv how to earn coins (arrow,outline,text saying click me to earn points)
+// make it obv how to earn coins                                                        --added
 // trying to again make it more mobile friendly, not going well
-
+// FIX MOBILE VIEW BUTTONS
+// fix cost scaling for upgrade(s)
+// cut off money after second decimal place
+// allow money to use k, m, b, t, q, etc. for readability
+// fix upgrade price thats shows, its incorrect                                          --fixed
 
 
 
@@ -618,11 +661,11 @@ function loadProgress() {
 // sell value                                                                           --added but to be adjusted
 // tooltips for value                                                                   --added, doesnt work on mobile sadge
 // sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   --added
-// upgrades
+// upgrades                                                                             --groundwork was laid, need to add more
 // ig very easy to edit saves but like I dont really care lol
 // add money per min
 // inv filter options
-// sounds?
+// sounds?                                        
 // add modifiers (blur, colourchange,etc) that gives times X of value
 // rare cold coin cookie clicker ahh gold cookie
 // pity system? genshin impact ahh idea 
@@ -635,10 +678,11 @@ function loadProgress() {
 
 // ---Upgrade Ideas--
 // multi spin (probably not gonna add but idk)
-// more cash per click 
+// more cash per click                                                                  --added
 // faster spin
 // better odds? (maybe jsut new case tbh)
 // passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max purple)
 //unlock case queue for afking also with this auto spin 
 // crit hits, and then also  damage upgrades and crit % upgrades
 // upgradeable chance to double the drop, up to like 10%?
+

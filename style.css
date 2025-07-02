@@ -4,13 +4,56 @@ body {
   text-align: center;
   margin-top: 50px;
 }
+/* text styles and related stuff mostly lol */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+.rotate {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(218, 233, 235);
+  animation: spinBoth 2s linear infinite;
+  transform-style: preserve-3d;
+}
+.silly-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgb(218, 233, 235);
+  animation: stretchY 1.5s infinite alternate;
+}
 
-.text {
+@keyframes stretchY {
+  0% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.5);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes spinBoth {
+  0% {
+    transform: rotate(0deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotate(360deg) rotateY(360deg);
+  }
+}
+  .text {
   font-size: 24px;
   font-weight: bold;
   color: rgb(218, 233, 235);
 }
 
+.sillyUpdateText{
+  font-size: 2px;
+  color: rgb(218, 233, 235);
+  margin-top: 10px;
+}
 .coin-text {
   font-size: 24px;
   font-weight: bold;
@@ -33,6 +76,17 @@ body {
   color: rgb(218, 233, 235);
 }
 
+.stats-text {
+  position: absolute;
+  font-size: 12px;
+  color: rgb(218, 233, 235);
+  display: flex;
+  text-align: left;
+  line-height: 15px;
+  z-index: 100;
+}
+
+/* GIF styles */
 .side-gif {
   width: 200px;
 }
@@ -52,6 +106,15 @@ body {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+}
+/* cointainers and stuff */
+.silly-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(218, 233, 235);
 }
 
 .gif-inventory {
@@ -101,61 +164,6 @@ body {
   width: 525px;
 }
 
-.use-case-btn {
-  font-size: 18px;
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-  background-color: pink;
-  color: white;
-  border-radius: 5px;
-}
-
-.prc-btn {
-  font-size: 18px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border: none;
-  background-color: pink;
-  color: white;
-  border-radius: 5px;
-  width: fit-content;
-}
-
-.sell-btn {
-  background-color: rgb(255, 105, 105);
-  color: white;
-  font-size: 14px;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.stats-btn {
-  background-color: rgb(24, 38, 233);
-  color: white;
-  font-size: 14px;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  width: fit-content;
-}
-
-.stats-text {
-  position: absolute;
-  font-size: 12px;
-  color: rgb(218, 233, 235);
-  display: flex;
-  text-align: left;
-  line-height: 15px;
-}
-
 .cases-container {
   text-align: left;
   margin-top: -30px;
@@ -189,6 +197,84 @@ body {
   display: none;
 }
 
+.btn-wrapper { /* wrapper for stats and upgrade buttons */
+  display: flex;
+  justify-content: flex-start; 
+  gap: 10px; 
+  margin-bottom: 10px;
+}
+
+/* buttons */
+.use-case-btn {
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: pink;
+  color: white;
+  border-radius: 5px;
+}
+
+.prc-btn {
+  font-size: 18px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background-color: pink;
+  color: white;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.sell-btn {
+  background-color: rgb(255, 105, 105);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.stats-btn {
+  background-color: rgb(24, 38, 233);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.upgrade-click-btn{
+  background-color: rgb(24, 38, 233);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10000 !important;
+}
+.upgrade-btn {
+  background-color: rgb(217, 63, 223);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+/* rarity borders */
 .rarity-border {
   border: 6px solid;
   border-radius: 12px;
@@ -220,7 +306,7 @@ body {
   border-color: #FFD700;
   box-shadow: 0 0 20px #FFD700;
 }
-
+/* no clue and new things */
 .coin-float {
   position: absolute;
   color: #039103;
