@@ -48,7 +48,11 @@ body {
   font-weight: bold;
   color: rgb(218, 233, 235);
 }
-
+.upgrade-text {
+  font-size: 12px;
+  color: rgb(218, 233, 235);
+  margin-top: 10px;
+}
 .sillyUpdateText{
   font-size: 2px;
   color: rgb(218, 233, 235);
@@ -252,16 +256,7 @@ body {
   width: fit-content;
 }
 
-.upgrade-click-btn{
-  background-color: rgb(24, 38, 233);
-  color: white;
-  font-size: 14px;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 10000 !important;
-}
+/* upgrade related */
 .upgrade-btn {
   background-color: rgb(217, 63, 223);
   color: white;
@@ -273,6 +268,26 @@ body {
   display: flex;
   align-items: center;
   width: fit-content;
+}
+.upgrade-click-btn{
+  background-color: rgb(24, 38, 233);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10000 !important;
+}
+.upgrade-passive-btn{
+  background-color: rgb(24, 38, 233);
+  color: white;
+  font-size: 14px;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10000 !important;
 }
 /* rarity borders */
 .rarity-border {

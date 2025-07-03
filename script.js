@@ -81,6 +81,7 @@ const statsBtn = document.getElementById("stats-btn");
 const upgradeBtn = document.getElementById("upgrade-btn");
 const toggleLootBtn = document.getElementById("toggle-loot-panel");
 const upgradeClickBtn = document.getElementById("upgrade-click-btn");
+const upgradePassiveBtn = document.getElementById("upgrade-passive-btn");
 
 
 //ui panels & cont
@@ -133,8 +134,31 @@ function getRandomItem() {
     }
   }
 }
-// === debug stuff===
 
+
+// cut off after 2 decimal places
+function truncate2(num) {
+  return Math.trunc(num * 100) / 100;
+}
+// ===upgrade funcs===
+
+// upgrade click increase cost
+function getUpgradeCostClick(unitsOwned) {
+  const baseCost = 250;
+  const multiplier = 1.07;
+  return Math.floor(baseCost * Math.pow(multiplier, unitsOwned));
+}
+
+// upgrade passive earn cost
+function getUpgradeCostPassive(unitsOwned) {
+  const baseCost = 100; 
+  const multiplier = 1.07;
+  return Math.floor(baseCost * Math.pow(multiplier, unitsOwned));
+}
+
+
+
+// === debug stuff===
 function simulateUnboxes(amount) {
   for (let i = 0; i < amount; i++) {
     const unboxedItem = getRandomItem();
@@ -168,7 +192,25 @@ function simulateUnboxes(amount) {
   renderInventory();
   renderStatsPanel();
   coinCounter.textContent = sillyCoins;
-  alert(`${amount} cases simulated and added to your progress.`);
+  alert(`${amount} cases simulated`);
+}
+// auticlicker 8cps
+let autoClickerInterval = null;
+
+const autoClickerBtn = document.getElementById("auto-clicker-btn");
+if (autoClickerBtn) {
+  autoClickerBtn.addEventListener("click", function () {
+    if (autoClickerInterval) {
+      clearInterval(autoClickerInterval);
+      autoClickerInterval = null;
+      autoClickerBtn.textContent = "Start Auto Clicker";
+    } else {
+      autoClickerInterval = setInterval(() => {
+        earnCoins(coinsPerClick);
+      }, 125); 
+      autoClickerBtn.textContent = "Stop Auto Clicker";
+    }
+  });
 }
 
 
@@ -191,6 +233,7 @@ function showFloatingCoins(text, color = "#00ff66") {
 
 function earnCoins(amount, silentFloat = false, color = "#00ff66") {
   sillyCoins += amount;
+  sillyCoins = truncate2(sillyCoins);
   lifetimeCoins += amount;
   coinCounter.textContent = sillyCoins;
 
@@ -239,12 +282,8 @@ function spinToReveal(finalGif) {
 
 // clicker
 sillyBtn.addEventListener("click", function () {
-  sillyCoins += coinsPerClick;
-  lifetimeCoins += coinsPerClick;
-  coinCounter.textContent = sillyCoins;
-  showFloatingCoins(`+${coinsPerClick}`);
+  earnCoins(coinsPerClick);
 });
-
 // buy case
 deductBtn.addEventListener("click", function () {
   if (sillyCoins >= 3) {
@@ -459,13 +498,44 @@ statsBtn.addEventListener("click", () => {
   statsPanel.style.display = isVisible ? "none" : "block";
 });
 
-//=== upgrade panel===           
-   
+//===upgrades===     
+//coins per click increase      
 function updateUpgradePanel() {
-  document.getElementById("upgrade-click-btn").textContent = ` (+1 Cost: ${coinsPerClick * 150})`;
+  const upgradesBought = Math.round((coinsPerClick - 1) / 0.2);
+  const cost = getUpgradeCostClick(upgradesBought);
+  document.getElementById("upgrade-click-btn").textContent = `+coins/click: ${cost}`;
 }
 
+upgradeClickBtn.addEventListener("click", () => {
+  const upgradesBought = Math.round((coinsPerClick - 1) / 0.2);
+  const cost = getUpgradeCostClick(upgradesBought);
+  if (sillyCoins >= cost) {
+    sillyCoins -= cost;
+    coinsPerClick = Math.round((coinsPerClick + 0.2) * 100) / 100;
+    coinCounter.textContent = sillyCoins;
+    updateUpgradePanel();
+  } else {
+    alert("Not enough Silly Coins!");
+  }
+});
 
+//passive earn upgrade
+function updatePassiveUpgradePanel() {
+  const upgradesBought = Math.round((sillyCoins - 1) / 0.1);
+  const cost = getUpgradeCostPassive(upgradesBought);
+  document.getElementById("upgrade-passive-btn").textContent = `passive income:${cost}`;
+}
+
+//upgradePassiveBtn.addEventListener("click", () => {
+ // const upgradesBought = Math.round((sillyCoins - 1) / 0.1);
+  //const cost = getUpgradeCostPassive(upgradesBought); 
+  //if (sillyCoins >= cost) {
+  //  sillyCoins -= cost;
+
+
+
+
+//  upgrade panel toggle
 upgradeBtn.addEventListener("click", () => {
   const isVisible = upgradePanel.style.display === "block";
   if (!isVisible) {
@@ -477,17 +547,6 @@ upgradeBtn.addEventListener("click", () => {
   upgradePanel.style.display = isVisible ? "none" : "block";
 });
 
-upgradeClickBtn.addEventListener("click", () => {
-  const cost = coinsPerClick *150;
-  if (sillyCoins >= cost) {
-    sillyCoins -= cost;
-    coinsPerClick++;
-    coinCounter.textContent = sillyCoins;
-    updateUpgradePanel();
-  } else {
-    alert("Not enough Silly Coins!");
-  }
-});
 
 // ===% panel===
 
@@ -505,7 +564,6 @@ toggleLootBtn.addEventListener("click", () => {
 });
 
 // ===selling funcs===
-
 // click to sell
 inventoryContainer.addEventListener("click", function (e) {
   if (e.target.classList.contains("sell-btn")) {
@@ -646,9 +704,9 @@ function loadProgress() {
 // stats open for some reason on debug sim100case and loading save
 // make it obv how to earn coins                                                        --added
 // trying to again make it more mobile friendly, not going well
-// FIX MOBILE VIEW BUTTONS
-// fix cost scaling for upgrade(s)
-// cut off money after second decimal place
+// FIX MOBILE VIEW BUTTONS                                      !!!!!!                           
+// fix cost scaling for upgrade(s)                              !!!!!!
+// cut off money after second decimal place                     !!!!!!
 // allow money to use k, m, b, t, q, etc. for readability
 // fix upgrade price thats shows, its incorrect                                          --fixed
 
@@ -685,4 +743,3 @@ function loadProgress() {
 //unlock case queue for afking also with this auto spin 
 // crit hits, and then also  damage upgrades and crit % upgrades
 // upgradeable chance to double the drop, up to like 10%?
-
