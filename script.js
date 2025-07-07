@@ -1,7 +1,7 @@
 
 // ===game setup % loot data===
-
-const lootTable = {
+// case 1 loot table
+const lootTable1 = {
   "Exceedingly Rare": {
     chance: 0.26,
     items: [
@@ -48,13 +48,71 @@ const lootTable = {
   },
 };
 const rarityOrder = ["Exceedingly Rare", "Covert", "Classified", "Restricted", "Mil-Spec"];
-const gifPool = [...lootTable["Mil-Spec"].items, ...lootTable["Restricted"].items, ...lootTable["Classified"].items, ...lootTable["Covert"].items];
+const gifPool = [...lootTable1["Mil-Spec"].items, ...lootTable1["Restricted"].items, ...lootTable1["Classified"].items, ...lootTable1["Covert"].items];
+
+// case 2 loot table
+const lootTable2 = {
+  "Exceedingly Rare2": {
+    chance: 0.26,
+    items: [
+      { name: "mikuApproved", src: "case_two/miku.gif", alt: "miku", value: 3600 },
+    ],
+  },
+  Covert2: {
+    chance: 0.64,
+    items: [
+      { name: "ducks", src: "case_two/ducks.webp", alt: "ducks", value: 700 },
+      { name: "soup", src: "case_two/soupenjoy.gif", alt: "soup", value: 620 },
+    ],
+  },
+  Classified2: {
+    chance: 3.2,
+    items: [
+      { name: "hate", src: "case_two/hate.webp", alt: "hate", value: 200 },
+      { name: "goldfish", src: "case_two/goldfish.gif", alt: "goldfish", value: 185 },
+      { name: "braincells", src: "case_two/braincells.webp", alt: "braincell", value: 160 },
+    ],
+  },
+  Restricted2: {
+    chance: 15.98,
+    items: [
+      { name: "lovepartner", src: "case_two/lovepartner.gif", alt: "lovepartner", value: 60 },
+      { name: "ican", src: "case_two/ican.gif", alt: "ican", value: 45 },
+      { name: "glowstick", src: "case_two/glowstick.gif", alt: "glowstick", value: 30 },
+      { name: "webdesign", src: "case_two/webdesign.gif", alt: "webdesign", value: 30 },
+      { name: "pain", src: "case_two/pain.gif", alt: "pain", value: 25 },
+    ],
+  },
+  "Mil-Spec2": {
+    chance: 79.92,
+    items: [
+      { name: "461", src: "case_two/461.gif", alt: "461", value: 15 },
+      { name: "imsleepy", src: "case_two/imsleepy.gif", alt: "imsleepy", value: 15 },
+      { name: "744", src: "case_two/744.gif", alt: "744", value: 8 },
+      { name: "597", src: "case_two/597.gif", alt: "597", value: 8 },
+      { name: "laundry", src: "case_two/laundry.gif", alt: "laundry", value: 6 },
+      { name: "05", src: "case_two/05.gif", alt: "05", value: 6 },
+      { name: "fakedownload", src: "case_two/fakedownload.gif", alt: "fakedownload", value: 3 },
+      { name: "silly", src: "case_two/silly.gif", alt: "silly", value: 3 },
+    ],
+  },
+};
+const rarityOrder2 = ["Exceedingly Rare2", "Covert2", "Classified2", "Restricted2", "Mil-Spec2"];
+const gifPool2 = [...lootTable2["Mil-Spec2"].items, ...lootTable2["Restricted2"].items, ...lootTable2["Classified2"].items, ...lootTable2["Covert2"].items];
+
+
+
+
 
 let inventory = {};
 let sillyCoins = 0;
 let lifetimeCoins = 0;
 let coinsPerClick = 1;
-let sillyCaseCount = 0;
+let cases ={
+  "beginner": 0,
+  "test": 0,
+  // add more case types
+}
 let casesOpenend = 0;
 let bestUnbox = null;
 let rarityStats = {
@@ -75,13 +133,15 @@ document.addEventListener("mousemove", (e) => {
 // ===dom elements===
 // Buttons
 const useCaseBtn = document.getElementById("use-case-btn");
-const deductBtn = document.getElementById("deduct-button");
+
 const sillyBtn = document.getElementById("silly-button");
 const statsBtn = document.getElementById("stats-btn");
 const upgradeBtn = document.getElementById("upgrade-btn");
 const toggleLootBtn = document.getElementById("toggle-loot-panel");
 const upgradeClickBtn = document.getElementById("upgrade-click-btn");
 const upgradePassiveBtn = document.getElementById("upgrade-passive-btn");
+const deductButton = document.getElementById("deduct-button");
+const buyCaseMenu = document.getElementById("buy-case-menu");
 
 
 //ui panels & cont
@@ -104,17 +164,20 @@ const saveStringInput = document.getElementById("save-string");
 // ===util funcs===
 
 // get  rarity index of an item
-function getRarityIndex(itemName) {
-  for (let i = 0; i < rarityOrder.length; i++) {
-    const tier = lootTable[rarityOrder[i]];
+function getRarityIndex(itemName, caseType = "beginner") {
+  const lootTable = caseType === "test" ? lootTable2 : lootTable1;
+  const order = caseType === "test" ? rarityOrder2 : rarityOrder;
+  for (let i = 0; i < order.length; i++) {
+    const tier = lootTable[order[i]];
     if (tier.items.some((item) => item.name === itemName)) {
       return i;
     }
   }
-  return rarityOrder.length;
+  return order.length;
 }
 
-function getItemDataByName(name) {
+function getItemDataByName(name, caseType = "beginner") {
+  const lootTable = caseType === "test" ? lootTable2 : lootTable1;
   for (const rarity in lootTable) {
     const item = lootTable[rarity].items.find(i => i.name === name);
     if (item) return item;
@@ -123,10 +186,19 @@ function getItemDataByName(name) {
 }
 
 // rand roll for rarity and select item
-function getRandomItem() {
+function getRandomItem(caseType = "beginner") {
+  let lootTable, rarityOrder;
+  if (caseType === "test") {
+    lootTable = lootTable2;
+    rarityOrder = rarityOrder2;
+  } else {
+    lootTable = lootTable1;
+    rarityOrder = rarityOrder;
+  }
+
   let roll = Math.random() * 100;
   let cumulativeChance = 0;
-  for (const rarity in lootTable) {
+  for (const rarity of rarityOrder) {
     cumulativeChance += lootTable[rarity].chance;
     if (roll <= cumulativeChance) {
       const itemPool = lootTable[rarity].items;
@@ -163,8 +235,8 @@ function simulateUnboxes(amount) {
   for (let i = 0; i < amount; i++) {
     const unboxedItem = getRandomItem();
     const itemData = getItemDataByName(unboxedItem.name);
-    const rarity = Object.keys(lootTable).find(r =>
-      lootTable[r].items.some(it => it.name === unboxedItem.name)
+    const rarity = Object.keys(lootTable1).find(r =>
+      lootTable1[r].items.some(it => it.name === unboxedItem.name)
     );
 
     // Update stats
@@ -241,31 +313,32 @@ function earnCoins(amount, silentFloat = false, color = "#00ff66") {
     showFloatingCoins(`+${amount}`, color);
   }
 }
-
-function spinToReveal(finalGif) {
+// spin to reveal 
+function spinToReveal(finalGif, caseType = "beginner") {
   const display = document.getElementById("reveal-gif");
 
   const totalCycles = 10;
   const initialDelay = 150;
   const delayGrowth = 50;
 
+  const gifPoolToUse = caseType === "test" ? gifPool2 : gifPool;
+  const lootTable = caseType === "test" ? lootTable2 : lootTable1;
+  const rarityOrderArr = caseType === "test" ? rarityOrder2 : rarityOrder;
+
   function cycle(index) {
     if (index >= totalCycles) {
-      // Final item reveal
       display.src = finalGif.src;
       display.alt = finalGif.alt;
 
-      const rarity = Object.keys(lootTable).find(r =>
+      const rarity = rarityOrderArr.find(r =>
         lootTable[r].items.some(i => i.name === finalGif.name)
       );
-
       const lowerRarity = rarity.toLowerCase().replace(/\s/g, "");
       display.className = `rarity-border ${lowerRarity}-border`;
-
       return;
     }
 
-    const randomGif = gifPool[Math.floor(Math.random() * gifPool.length)];
+    const randomGif = gifPoolToUse[Math.floor(Math.random() * gifPoolToUse.length)];
     display.src = randomGif.src;
     display.alt = randomGif.alt;
 
@@ -284,63 +357,102 @@ function spinToReveal(finalGif) {
 sillyBtn.addEventListener("click", function () {
   earnCoins(coinsPerClick);
 });
-// buy case
-deductBtn.addEventListener("click", function () {
-  if (sillyCoins >= 3) {
-    sillyCoins -= 3;
-    sillyCaseCount++;
-    updateCaseDisplay();
-    showFloatingCoins("-3", "#ff3333"); 
-    coinCounter.textContent = sillyCoins;
-  } else {
-    alert("Not enough Silly Coins!");
+
+
+deductButton.addEventListener("click", function () {
+  buyCaseMenu.style.display = buyCaseMenu.style.display === "block" ? "none" : "block";
+});
+
+// Hide menu if clicking outside
+document.addEventListener("click", function (e) {
+  if (!buyCaseMenu.contains(e.target) && e.target !== deductButton) {
+    buyCaseMenu.style.display = "none";
   }
+});
+
+
+// Buy case logic
+document.querySelectorAll(".buy-case-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    const caseType = btn.getAttribute("data-case");
+    let cost = caseType === "beginner" ? 3 : caseType === "test" ? 10 : 0;
+    if (sillyCoins >= cost) {
+      sillyCoins -= cost;
+      cases[caseType]++;
+      updateCaseDisplay();
+      showFloatingCoins(`-${cost}`, "#ff3333");
+      coinCounter.textContent = sillyCoins;
+    } else {
+      alert("Not enough Silly Coins!");
+    }
+    buyCaseMenu.style.display = "none";
+  });
 });
 
 // use case 
-useCaseBtn.addEventListener("click", function () {
-  if (useCaseBtn.disabled) return;
+const openCaseButton = document.getElementById("open-case-button");
+const openCaseMenu = document.getElementById("open-case-menu");
 
-  if (sillyCaseCount <= 0) {
-    alert("you don't have any silly cases!");
-    return;
-  }
-  useCaseBtn.disabled = true;
-
-  sillyCaseCount--;
-  casesOpenend++;
-  updateCaseDisplay();
-
-  const unboxedItem = getRandomItem();
-  const itemValue = getItemDataByName(unboxedItem.name)?.value || 0;
-  const rarity = Object.keys(lootTable).find(r =>
-    lootTable[r].items.some(i => i.name === unboxedItem.name)
-  );
-
-  rarityStats[rarity]++;
-  if (!bestUnbox || itemValue > bestUnbox.value) {
-    bestUnbox = { name: unboxedItem.name, value: itemValue, rarity };
-  }
-
-  if (inventory[unboxedItem.name]) {
-    inventory[unboxedItem.name].count++;
-  } else {
-    inventory[unboxedItem.name] = {
-      count: 1,
-      src: unboxedItem.src,
-      rarityIndex: getRarityIndex(unboxedItem.name),
-    };
-  }
-
-  resultDiv.innerHTML = `<p>you unboxed:</p><img id="reveal-gif" src="spinnyspheal.gif" width="300" alt="reveal">`;
-  spinToReveal(unboxedItem);
-
-  setTimeout(() => {
-    renderInventory();
-    useCaseBtn.disabled = false;
-  }, 4300);
+openCaseButton.addEventListener("click", function () {
+  openCaseMenu.style.display = openCaseMenu.style.display === "block" ? "none" : "block";
 });
 
+// Hide menu if clicking outside
+document.addEventListener("click", function (e) {
+  if (!openCaseMenu.contains(e.target) && e.target !== openCaseButton) {
+    openCaseMenu.style.display = "none";
+  }
+});
+
+// Open case logic
+// Open case logic
+document.querySelectorAll(".open-case-btn").forEach(btn => {
+  btn.addEventListener("click", function () {
+    const caseType = btn.getAttribute("data-case");
+    if (cases[caseType] <= 0) {
+      alert("You don't have any of this case!");
+      openCaseMenu.style.display = "none";
+      return;
+    }
+
+    cases[caseType]--;
+    casesOpenend++;
+    updateCaseDisplay();
+
+    // Use correct loot table and rarity order
+    const unboxedItem = getRandomItem(caseType);
+    const itemValue = getItemDataByName(unboxedItem.name, caseType)?.value || 0;
+    const lootTable = caseType === "test" ? lootTable2 : lootTable1;
+    const rarityOrderArr = caseType === "test" ? rarityOrder2 : rarityOrder;
+    const rarity = rarityOrderArr.find(r =>
+      lootTable[r].items.some(i => i.name === unboxedItem.name)
+    );
+
+    rarityStats[rarity] = (rarityStats[rarity] || 0) + 1;
+    if (!bestUnbox || itemValue > bestUnbox.value) {
+      bestUnbox = { name: unboxedItem.name, value: itemValue, rarity };
+    }
+
+    if (inventory[unboxedItem.name]) {
+      inventory[unboxedItem.name].count++;
+    } else {
+      inventory[unboxedItem.name] = {
+        count: 1,
+        src: unboxedItem.src,
+        rarityIndex: getRarityIndex(unboxedItem.name, caseType),
+      };
+    }
+
+    resultDiv.innerHTML = `<p>you unboxed:</p><img id="reveal-gif" src="${unboxedItem.src}" width="300" alt="reveal">`;
+    spinToReveal(unboxedItem, caseType);
+
+    setTimeout(() => {
+      renderInventory();
+    }, 4300);
+
+    openCaseMenu.style.display = "none";
+  });
+});
 let keyBuffer = [];
 
 // secrets (not so secret because well anyone can read this )
@@ -352,7 +464,7 @@ document.addEventListener("keydown", function (e) {
 
   // Silly cheat: +100 cases
   if (typed === "silly") {
-    sillyCaseCount += 100;
+    cases["beginner"] += 100;
     updateCaseDisplay();
     alert("How did you know!?");
   }
@@ -365,6 +477,20 @@ document.addEventListener("keydown", function (e) {
     panel.style.display = isVisible ? "none" : "block";
     alert(isVisible ? "Debug Mode Deactivated!" : "Debug Mode Activated");
   }
+//miku miku oo ee oo, shelved for the time being :( cant test audio here </3
+/*if (typed === "miku") {
+  const audio = document.createElement("audio");
+  audio.id = "miku-audio";
+  audio.src = "mikusong.mp3";
+  audio.autoplay = false;
+  audio.loop = true;
+  audio.style.display = "none"; 
+  document.body.appendChild(audio);
+  
+  alert("miku miku oo ee oo");
+}
+*/
+
 });
 
 function renderInventory() {
@@ -408,7 +534,7 @@ function renderLootPanel() {
   lootPanel.innerHTML = "";
 
   rarityOrder.forEach(rarity => {
-    const { chance, items } = lootTable[rarity];
+    const { chance, items } = lootTable1[rarity];
     const individualChance = chance / items.length;
 
     items.forEach(item => {
@@ -464,8 +590,9 @@ function renderLootPanel() {
     });
   });
 }
+
 function updateCaseDisplay() {
-  caseDisplay.textContent = sillyCaseCount;
+  caseDisplay.textContent = `Silly: ${cases["beginner"]} | Blehh :3 : ${cases["test"]}`;
 }
 
 // ===stats panel===
@@ -500,7 +627,7 @@ statsBtn.addEventListener("click", () => {
 
 //===upgrades===     
 //coins per click increase      
-function updateUpgradePanel() {
+function coinsPerClickBtn() {
   const upgradesBought = Math.round((coinsPerClick - 1) / 0.2);
   const cost = getUpgradeCostClick(upgradesBought);
   document.getElementById("upgrade-click-btn").textContent = `+coins/click: ${cost}`;
@@ -513,24 +640,49 @@ upgradeClickBtn.addEventListener("click", () => {
     sillyCoins -= cost;
     coinsPerClick = Math.round((coinsPerClick + 0.2) * 100) / 100;
     coinCounter.textContent = sillyCoins;
-    updateUpgradePanel();
+    coinsPerClickBtn();
   } else {
     alert("Not enough Silly Coins!");
   }
 });
 
 //passive earn upgrade
+let passiveIncome = 0;
+let passiveUpgradesBought = 0;
+let passiveInterval = null;
+
 function updatePassiveUpgradePanel() {
-  const upgradesBought = Math.round((sillyCoins - 1) / 0.1);
-  const cost = getUpgradeCostPassive(upgradesBought);
-  document.getElementById("upgrade-passive-btn").textContent = `passive income:${cost}`;
+  const cost = getUpgradeCostPassive(passiveUpgradesBought);
+  upgradePassiveBtn.textContent = `+coins/sec: ${cost}`;
 }
 
-//upgradePassiveBtn.addEventListener("click", () => {
- // const upgradesBought = Math.round((sillyCoins - 1) / 0.1);
-  //const cost = getUpgradeCostPassive(upgradesBought); 
-  //if (sillyCoins >= cost) {
-  //  sillyCoins -= cost;
+upgradePassiveBtn.addEventListener("click", () => {
+  const cost = getUpgradeCostPassive(passiveUpgradesBought);
+  if (sillyCoins >= cost) {
+    sillyCoins -= cost;
+    passiveUpgradesBought++;
+    passiveIncome = Math.round(passiveUpgradesBought * 0.1 * 100) / 100;
+    coinCounter.textContent = sillyCoins;
+    updatePassiveUpgradePanel();
+    startPassiveIncome();
+  } else {
+    alert("Not enough Silly Coins!");
+  }
+});
+
+function startPassiveIncome() {
+  if (passiveInterval) return;
+  passiveInterval = setInterval(() => {
+    if (passiveIncome > 0) {
+      earnCoins(passiveIncome, true);
+    }
+  }, 1000);
+}
+
+// Start passive income if upgrades already bought (e.g. after loading)
+if (passiveUpgradesBought > 0) {
+  startPassiveIncome();
+}
 
 
 
@@ -542,7 +694,8 @@ upgradeBtn.addEventListener("click", () => {
     if (statsPanel.style.display === "block") {
       statsPanel.style.display = "none";
     }
-    updateUpgradePanel();
+    coinsPerClickBtn();
+    updatePassiveUpgradePanel(); 
   }
   upgradePanel.style.display = isVisible ? "none" : "block";
 });
@@ -641,7 +794,7 @@ function setBulkAmount(amount) {
 function saveProgress() {
   const gameData = {
     sillyCoins,
-    sillyCaseCount,
+    cases,
     inventory,
     lifetimeCoins,
     casesOpenend,
@@ -660,7 +813,7 @@ function loadProgress() {
     const gameData = JSON.parse(atob(base64));
 
     sillyCoins = gameData.sillyCoins || 0;
-    sillyCaseCount = gameData.sillyCaseCount || 0;
+    cases = gameData.cases || { beginner: 0, test: 0 };
     inventory = gameData.inventory || {};
     lifetimeCoins = gameData.lifetimeCoins || 0;
     casesOpenend = gameData.casesOpenend || 0;
@@ -684,62 +837,86 @@ function loadProgress() {
   }
 }
 
-// add save system                                                                      --added
-// add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
-// inv spoils pull                                                                      --fixed finally
-// % somewhere                                                                          --added
-// lock page so it stops bopping up and down depending on gif size lol                  --fixed
-// make it more mobile friendly                                                         --fixed
-// show % needs two clicks                                                              --fixed, same problem with stats button now wtf
-// fix stat btn needing two clicks                cba to fix rn ngl
-// make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
-// stats page (will break current saves </3)                                            --added, need to add save integration                                   
-// being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
-// numbers - +                                                                          --added
-// make money sticky                                                                    --added             
-// inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
-// make cases either sticky or higher prob higher up                                    
-// basic debug tools                                                                    --added
-// update number irgendwo hinknallen auf trollig                                        --added       
-// stats open for some reason on debug sim100case and loading save
-// make it obv how to earn coins                                                        --added
-// trying to again make it more mobile friendly, not going well
-// FIX MOBILE VIEW BUTTONS                                      !!!!!!                           
-// fix cost scaling for upgrade(s)                              !!!!!!
-// cut off money after second decimal place                     !!!!!!
-// allow money to use k, m, b, t, q, etc. for readability
-// fix upgrade price thats shows, its incorrect                                          --fixed
+/*
+For the time being last update
+------------------------------
+Fix cases
+fix spin
+fix stats 
+fix unbox logic
+Fix mobile view?
+*/
 
 
 
 
-// fully rewrote the structure to make it easier to understand and to work with, this was cancer
-
-// ---------later problems(seems like too much work rn)---------
-// sell value                                                                           --added but to be adjusted
-// tooltips for value                                                                   --added, doesnt work on mobile sadge
-// sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   --added
-// upgrades                                                                             --groundwork was laid, need to add more
-// ig very easy to edit saves but like I dont really care lol
-// add money per min
-// inv filter options
-// sounds?                                        
-// add modifiers (blur, colourchange,etc) that gives times X of value
-// rare cold coin cookie clicker ahh gold cookie
-// pity system? genshin impact ahh idea 
 
 
-// ------------mobile stuff------------
-// vibrate on rare pulls (with toggle somwhere ig options menu)
-// allow button to be hold for like 8cps 
 
 
-// ---Upgrade Ideas--
-// multi spin (probably not gonna add but idk)
-// more cash per click                                                                  --added
-// faster spin
-// better odds? (maybe jsut new case tbh)
-// passive income (player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max purple)
-//unlock case queue for afking also with this auto spin 
-// crit hits, and then also  damage upgrades and crit % upgrades
-// upgradeable chance to double the drop, up to like 10%?
+
+
+
+
+/* 
+Fix style being in html and not in css
+add save system                                                                      --added
+add buffer to prevent being able to spam case before animation is finished           --fixed                                                    
+inv spoils pull                                                                      --fixed finally
+% somewhere                                                                          --added
+lock page so it stops bopping up and down depending on gif size lol                  --fixed
+make it more mobile friendly                                                         --fixed
+show % needs two clicks                                                              --fixed, same problem with stats button now wtf
+fix stat btn needing two clicks                cba to fix rn ngl                     --fixed   
+make better unboxing animation                                                       --semi fixed lol still looks scuffed but im bad at this :( 
+stats page (will break current saves </3)                                            --added, need to add save integration                                   
+being able to view gifs unboxed (expand them by clicking on yk)                      --added but cant add button to close might needed for mobile support
+numbers - +                                                                          --added
+make money sticky                                                                    --added             
+inv sort by value fixed (later ig need to rewrite once inv sort options)             --fixed
+make cases either sticky or higher prob higher up                                    
+basic debug tools                                                                    --added
+update number irgendwo hinknallen auf trollig                                        --added       
+stats open for some reason on debug sim100case and loading save
+make it obv how to earn coins                                                        --added
+trying to again make it more mobile friendly, not going well
+FIX MOBILE VIEW BUTTONS                                      !!!!!!                           
+fix cost scaling for upgrade(s)                                                      --fixed
+cut off money after second decimal place                                             --added, somewhat
+allow money to use k, m, b, t, q, etc. for readability?
+fix upgrade price thats shows, its incorrect                                         --fixed
+fix cases lol
+make miku secret work correctly, and add stylesheet for it
+
+
+
+fully rewrote the structure to make it easier to understand and to work with, this was cancer
+
+---------later problems(seems like too much work rn)---------
+sell value                                                                           --added but to be adjusted
+tooltips for value                                                                   --added, doesnt work on mobile sadge
+sell duplicates,auto sell under x rarity,bulk sell(as in 1,10,all change with btn)   --added
+upgrades                                                                             --groundwork was laid, need to add more
+ig very easy to edit saves but like I dont really care lol
+add money per min ?
+inv filter options
+sounds?                                        
+add modifiers (blur, colourchange,etc) that gives times X of value
+rare cold coin cookie clicker ahh gold cookie
+pity system? genshin impact ahh idea 
+
+------------mobile stuff------------
+vibrate on rare pulls (with toggle somwhere ig options menu)
+allow button to be hold for like 8cps 
+
+---Upgrade Ideas--
+multi spin (probably not gonna add but idk)
+more cash per click                                                                  --added
+faster spin
+better odds? (maybe jsut new case tbh)
+passive income 1 normal
+passive income 2 player hires ppl to spin (no actual cost for player) can upgrade what they can get, start of with max purple
+unlock case queue for afking also with this auto spin 
+crit hits, and then also  damage upgrades and crit % upgrades
+upgradeable chance to double the drop, up to like 10%?
+*/

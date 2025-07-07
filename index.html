@@ -53,18 +53,31 @@
     </div>
   </div>
 </div>
-         <div class="button-container">
-         <div class="deduct-container">
-            <p class="text">
-               Buy Silly Case ^o^
-            </p>
-            <img id="deduct-button" src="https://preview.redd.it/i-made-steamhappy-vector-image-v0-jmmqmwzwk14c1.png?width=800&format=png&auto=webp&s=7cc8498450fbd323b22899722ac24cbd23a91a83"
-            class="deduct-gif" alt="Deduct Coins">
-         </div>
-         <button id="use-case-btn" class="use-case-btn">
-            Use Case
-         </button>
-      </div>
+
+<div class="button-container">
+  <div class="deduct-container" style="position: relative;">
+    <p class="text">
+      Buy Cases ^o^
+    </p>
+    <img id="deduct-button" src="https://preview.redd.it/i-made-steamhappy-vector-image-v0-jmmqmwzwk14c1.png?width=800&format=png&auto=webp&s=7cc8498450fbd323b22899722ac24cbd23a91a83"
+      class="deduct-gif" alt="Deduct Coins" style="cursor:pointer;">
+    <div id="buy-case-menu" style="display:none; position:absolute; top:60px; left:0; background:#222; border-radius:8px; box-shadow:0 2px 8px #000a; padding:10px; z-index:200;">
+      <button class="buy-case-btn" data-case="beginner">Buy Silly Case (3 coins)</button><br>
+      <button class="buy-case-btn" data-case="test">Buy Blehh :3 Case (10 coins)</button>
+    </div>
+</div>
+</div>
+
+<div class="open-container" style="position: relative; display: inline-block;">
+  <p class="text">Open Cases</p>
+  <img id="open-case-button" src="https://cdn.7tv.app/emote/01GX61SAT00003X14AM8PZ7GAZ/3x.avif"
+    class="deduct-gif" alt="Open Case" style="cursor:pointer; width:48px;">
+  <div id="open-case-menu" style="display:none; position:absolute; top:60px; left:0; background:#222; border-radius:8px; box-shadow:0 2px 8px #000a; padding:10px; z-index:200;">
+    <button class="open-case-btn" data-case="beginner">Open Silly Case</button><br>
+    <button class="open-case-btn" data-case="test">Open Blehh :3 Case</button>
+  </div>
+</div>
+
 <div id="unbox-result" class="unbox-result">
   <p>You unboxed:</p>
   <img id="reveal-gif" src="case_one/spinnyspheal.gif" alt="Reveal" width="300">
@@ -74,7 +87,7 @@
             Cases
          </p>
          <p class="text">
-            Silly Case x
+             Cases x
             <span id="case-total">
                0
             </span>
